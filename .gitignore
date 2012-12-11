@@ -1,0 +1,9 @@
+# files to ignore
+
+# all the swap files our editor might create
+.*.sw?
+*~
+
+# compiled code
+welcome
+
