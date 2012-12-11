@@ -2,9 +2,14 @@
 
 #include $(GOROOT)/src/Make.$(GOARCH)
 
-TARGETS=welcome
+TARGETS=welcome.bin
 
-all:main
+GOPATH := $(shell pwd -L)
+export GOPATH
+
+all:
+	go build -o welcome.bin welcome
+
 
 clean:
 	rm -f $(TARGETS)
