@@ -14,7 +14,7 @@ import (
 )
 
 type PwdGen struct {
-    charset string
+    charset *Charset
     length int
 }
 
@@ -22,11 +22,15 @@ type PwdGen struct {
 // Maybe we can replace this later with a better, cryptographically
 // strong random number generator.
 func init() {
+    // initialize random seed
     rand.Seed(time.Now().UTC().UnixNano())
+
+    // initialize charsets
+    InitializeCharsets()
 }
 
 // Constructor for Password Generators.
-func NewPwdGen(charset string, length int) (*PwdGen, error) {
+func NewPwdGen(charset *Charset, length int) (*PwdGen, error) {
     if length < 1 {
         return nil, fmt.Errorf("the minimum length of a password is 1, you provided %d.", length)
     }
@@ -39,13 +43,8 @@ func NewPwdGen(charset string, length int) (*PwdGen, error) {
 // Generate a fresh password string.
 func (p *PwdGen) String() string {
     retval := ""
-    //maxidx := big.NewInt(int64(len(p.charset)))A
-    maxidx := len(p.charset)
-    var idx int
-
     for c := 0; c < p.length; c++ {
-        idx = rand.Intn(maxidx)
-        retval += string(p.charset[idx])
+        retval += p.charset.RandomChar()
     }
     return retval
 }
