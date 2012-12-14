@@ -27,6 +27,8 @@ func init() {
 // Any error from the password generator will be relayed here and can be printed
 // to the user.
 func PrintPassword() error {
+    var gen *pwdgen.PwdGen
+    var err error
     if gen, err = pwdgen.NewPwdGen("abcdefghijklmnopqrstuvwxyz", flagLength); err != nil {
        return err
     }
