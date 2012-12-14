@@ -2,14 +2,13 @@
 
 #include $(GOROOT)/src/Make.$(GOARCH)
 
-TARGETS=welcome.bin
+TARGETS=mpw
 
 GOPATH := $(shell pwd -L)
 export GOPATH
 
 all:
-	go build -o welcome.bin welcome
-
+	go build -o mpw main
 
 clean:
 	rm -f $(TARGETS)
