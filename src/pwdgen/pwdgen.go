@@ -9,6 +9,7 @@ import (
 //    "math/big"
     "math/rand"
     "time"
+    "fmt"
 )
 
 type PwdGen struct {
@@ -20,11 +21,14 @@ func init() {
     rand.Seed(time.Now().UTC().UnixNano())
 }
 
-func NewPwdGen(charset string, length int) *PwdGen {
+func NewPwdGen(charset string, length int) (*PwdGen, error) {
+    if length < 1 {
+        return nil, fmt.Errorf("the minimum length of a password is 1i, you provided %d.", length)
+    }
     retval := new(PwdGen)
     retval.charset = charset
     retval.length = length
-    return retval
+    return retval, nil
 }
 
 func (p *PwdGen) String() string {

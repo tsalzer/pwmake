@@ -7,20 +7,32 @@ package main
 import (
     "flag"
     "fmt"
+    "os"
     "pwdgen"
 )
 
-var flagDebug bool
+var flagLength int
 var gen *pwdgen.PwdGen
+var genErr error
 
 func init() {
-    flag.BoolVar(&flagDebug, "d", false, "debug mode")
+    flag.IntVar(&flagLength, "l", 10, "length of the password to generate")
     flag.Parse()
-    gen = pwdgen.NewPwdGen("abcdefghijklmnopqrstuvwxyz", 10)
+    gen, genErr = pwdgen.NewPwdGen("abcdefghijklmnopqrstuvwxyz", flagLength)
+
+    /*
+    if gen, genErr = pwdgen.NewPwdGen("abcdefghijklmnopqrstuvwxyz", flagLength); err != nil {
+        panic(err)
+    }
+    */
 }
 
 func main() {
-    fmt.Printf("Will create a password for you shortly...\n")
-    fmt.Printf("password: %s\n", gen)
+    if gen == nil {
+        fmt.Printf("%s\n", genErr)
+        os.Exit(1)
+    } else {
+        fmt.Printf("%s\n", gen)
+    }
 }
 
