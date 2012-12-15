@@ -10,6 +10,9 @@ export GOPATH
 all:
 	go build -o mpw main
 
+test:
+	go test main pwdgen
+
 clean:
 	rm -f $(TARGETS)
 

@@ -13,6 +13,16 @@ task :default do
 
 end
 
+task :test do
+    with_env do 
+        system("echo \"GOPATH is $GOPATH\"")
+        puts "go test main pwdgen"
+        system("go test main pwdgen")
+        fail unless $? == 0
+    end
+
+end
+
 task :http do
     with_env do
         puts "godoc -http=:6060 -path=\"#{PROJECTROOT}/src\""
