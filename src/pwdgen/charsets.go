@@ -6,7 +6,6 @@ package pwdgen
 
 import (
     "fmt"
-    "math/rand"
 )
 
 // A Charset. Basically, a string.
@@ -50,8 +49,6 @@ func GetCharsetsNames() []string {
 
 // Generate a fresh password string.
 func (p *Charset) RandomChar() string {
-    maxidx := len(p.chars)
-    idx := rand.Intn(maxidx)
-    return string(p.chars[idx])
+    return string(RandomRune(p.chars))
 }
 

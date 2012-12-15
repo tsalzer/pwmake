@@ -34,6 +34,10 @@ task :http do
     end
 end
 
+task :clean do
+    File.unlink("#{PROJECTROOT}/mpw")
+end
+
 def with_env(&blk)
     oldpath=ENV["GOPATH"]
     ENV["GOPATH"]="#{PROJECTROOT}:#{oldpath}"

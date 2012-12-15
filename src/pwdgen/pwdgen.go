@@ -6,10 +6,6 @@
 package pwdgen
 
 import (
-//    "crypto/rand"
-//    "math/big"
-    "math/rand"
-    "time"
     "fmt"
 )
 
@@ -23,7 +19,7 @@ type PwdGen struct {
 // strong random number generator.
 func init() {
     // initialize random seed
-    rand.Seed(time.Now().UTC().UnixNano())
+    InitializeRandomizer()
 
     // initialize charsets
     InitializeCharsets()
