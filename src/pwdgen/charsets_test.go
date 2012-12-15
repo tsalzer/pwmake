@@ -14,21 +14,15 @@ import (
 // We consider 1000 calls for a charset of 10 characters as many.
 func TestRandomChar(t *testing.T) {
     const numsamples = 1000
-    cs := NewCharset("0123456789")
-    var char string
-    results := map[string] int {
-        "0" : 0,
-        "1" : 0,
-        "2" : 0,
-        "3" : 0,
-        "4" : 0,
-        "5" : 0,
-        "6" : 0,
-        "7" : 0,
-        "8" : 0,
-        "9" : 0,
+    const charsetstring = "0123456789"
 
+    results := make(map[string] int)
+    for _,v := range charsetstring {
+        results[string(v)] = 0
     }
+
+    cs := NewCharset(charsetstring)
+    var char string
 
     // run the sampling
     for i := 0; i < numsamples; i++ {
