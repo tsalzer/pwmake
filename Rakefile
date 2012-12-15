@@ -1,7 +1,10 @@
 # -*- ruby -*-
 # There's no make on my Mac, but every Mac comes with Ruby... :)
 PROJECTROOT=File.dirname(__FILE__)
-puts PROJECTROOT
+#puts PROJECTROOT
+
+# for verbose tests:
+TEST_VERBOSE="-v"
 
 task :default do
     with_env do 
@@ -16,8 +19,8 @@ end
 task :test do
     with_env do 
         system("echo \"GOPATH is $GOPATH\"")
-        puts "go test main pwdgen"
-        system("go test main pwdgen")
+        puts "go test #{TEST_VERBOSE} main pwdgen"
+        system("go test #{TEST_VERBOSE} main pwdgen")
         fail unless $? == 0
     end
 
