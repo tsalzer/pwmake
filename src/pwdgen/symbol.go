@@ -6,7 +6,7 @@ package pwdgen
 
 import (
     "bytes"
-//    "fmt"
+    "fmt"
 )
 
 // A symbol.
@@ -32,17 +32,8 @@ func NewSymbol(chars string) *Symbol {
     return retval
 }
 
-// create a new SymbolSet from symbols.
-func NewSymbolSet(symbols []*Symbol) (*SymbolSet, error) {
-    retval := new(SymbolSet)
-    var err error
-    //return retval, nil
-    for _, val := range(symbols) {
-        if e := retval.Put(val); e != nil {
-            err = e
-        }
-    }
-    return retval, err
+func NewSymbolSet() *SymbolSet {
+    return new(SymbolSet)
 }
 
 // put a single symbol into a symbol set.
@@ -66,12 +57,56 @@ func (p *SymbolSet) String() string {
     return buffer.String()
 }
 
+// call the given function with every symbol in the set.
+// cancels operation as soon as the function returns an error.
+func (p *SymbolSet) Each(fn func(s *Symbol) error) error {
+    var err error
+    for _, symbol := range(p.symbols) {
+        if err = fn(symbol) ; err != nil {
+            return err
+        }
+    }
+    return err
+}
+
+// check if the given Stringer is conainet in the set.
+func (p *SymbolSet) Contains(s fmt.Stringer) bool {
+    return p.ContainsString(s.String())
+}
+
+// check if the set contains the given string.
+// TODO: this is implemented in an ugly way.
+func(p *SymbolSet) ContainsString(cmp string) bool {
+    var err error
+
+    err = p.Each(func(s *Symbol) error {
+        if (s.chars == cmp) {
+            return  fmt.Errorf("found %s", cmp)
+        }
+        return nil
+    })
+    return err != nil
+}
+
+// create a new SymbolSet from symbols.
+func NewSymbolSetFromSymbols(symbols []*Symbol) (*SymbolSet, error) {
+    retval := NewSymbolSet()
+    var err error
+    //return retval, nil
+    for _, val := range(symbols) {
+        if e := retval.Put(val); e != nil {
+            err = e
+        }
+    }
+    return retval, err
+}
+
 // create a new SymbolSet from a single string.
 // This will create lots of single-rune-Symbols. If any symbol is
 // used more than once, there will be an error. However, the symbol
 // set might still be useable.
 func NewSymbolSetFromString(chars string) (*SymbolSet, error) {
-    return NewSymbolSet( SymbolsFromString( chars ) );
+    return NewSymbolSetFromSymbols( SymbolsFromString( chars ) );
 }
 
 // Splits a string up in runes, generate a symbol from each rune.
