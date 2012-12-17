@@ -5,6 +5,7 @@
 package pwdgen
 
 import (
+    "bytes"
 //    "fmt"
 )
 
@@ -16,6 +17,12 @@ type Symbol struct {
     chars string
 }
 
+// A symbol set.
+// An unordered set of symbols.
+type SymbolSet struct {
+    symbols []*Symbol
+}
+
 // Constructor.
 // Creates a single symbol from the given string. It does *not* break
 // up the string into runes!
@@ -23,6 +30,48 @@ func NewSymbol(chars string) *Symbol {
     retval := new(Symbol)
     retval.chars = chars
     return retval
+}
+
+// create a new SymbolSet from symbols.
+func NewSymbolSet(symbols []*Symbol) (*SymbolSet, error) {
+    retval := new(SymbolSet)
+    var err error
+    //return retval, nil
+    for _, val := range(symbols) {
+        if e := retval.Put(val); e != nil {
+            err = e
+        }
+    }
+    return retval, err
+}
+
+// put a single symbol into a symbol set.
+// returns an error if the symbol already is in the set.
+func (p *SymbolSet) Put(symbol *Symbol) error {
+    p.symbols = append(p.symbols, symbol)
+    return nil
+}
+
+// get the number of symbols in the symbol set.
+func (p *SymbolSet) Len() int {
+    return len(p.symbols)
+}
+
+// convert the symbol set into a single string.
+func (p *SymbolSet) String() string {
+    var buffer bytes.Buffer
+    for _,v := range(p.symbols) {
+        buffer.WriteString(v.String())
+    }
+    return buffer.String()
+}
+
+// create a new SymbolSet from a single string.
+// This will create lots of single-rune-Symbols. If any symbol is
+// used more than once, there will be an error. However, the symbol
+// set might still be useable.
+func NewSymbolSetFromString(chars string) (*SymbolSet, error) {
+    return NewSymbolSet( SymbolsFromString( chars ) );
 }
 
 // Splits a string up in runes, generate a symbol from each rune.

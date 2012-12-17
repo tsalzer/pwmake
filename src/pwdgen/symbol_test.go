@@ -33,3 +33,22 @@ func TestSymbolsFromString(t *testing.T) {
     }
 }
 
+func TestSymbolSetFromString(t *testing.T) {
+    const cs = "0123456789"
+    var symset *SymbolSet
+    var err error
+
+    if symset,err = NewSymbolSetFromString(cs); err != nil {
+        t.Errorf("when creating the symbol set from \"%s\": %s", cs, err)
+    }
+    if symset == nil {
+        t.Errorf("did not get a symbol set, can't go on.")
+        return
+    }
+
+    if symset.Len() != len(cs) {
+        t.Errorf("symbol \"%s\" contains %d elements, expected %d (from string \"%s\")",
+            symset, symset.Len(), len(cs), cs)
+    }
+}
+
