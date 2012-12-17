@@ -4,6 +4,10 @@
 
 package pwdgen
 
+import (
+//    "fmt"
+)
+
 // A symbol.
 // Basically, a symbol is a string. In most cases, its a single rune
 // string, but the intention is to support symbol sets consisting of
@@ -18,6 +22,17 @@ type Symbol struct {
 func NewSymbol(chars string) *Symbol {
     retval := new(Symbol)
     retval.chars = chars
+    return retval
+}
+
+// Splits a string up in runes, generate a symbol from each rune.
+// This will return an array containing a Symbol for each rune in the
+// string. This function does not check for duplicate symbols.
+func SymbolsFromString(chars string) []*Symbol {
+    retval := make([]*Symbol, len(chars))
+    for i,v := range(chars) {
+        retval[i] = NewSymbol(string(v))
+    }
     return retval
 }
 
