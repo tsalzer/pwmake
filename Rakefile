@@ -4,7 +4,8 @@ PROJECTROOT=File.dirname(__FILE__)
 #puts PROJECTROOT
 
 # for verbose tests:
-TEST_VERBOSE="-v"
+#TEST_VERBOSE="-v"
+TEST_VERBOSE=""
 
 task :default do
     with_env do 
