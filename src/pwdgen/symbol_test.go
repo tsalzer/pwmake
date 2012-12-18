@@ -1,7 +1,6 @@
 package pwdgen
 
 import (
-    "bytes"
     "testing"
 )
 
@@ -40,7 +39,6 @@ func TestSymbolsFromString(t *testing.T) {
 
 func TestEachSymbol(t *testing.T) {
     const cs = "0123456789"
-    var buffer bytes.Buffer
     var symset *SymbolSet
     var err error
     if symset,err = NewSymbolSetFromString(cs); err != nil {
@@ -51,16 +49,30 @@ func TestEachSymbol(t *testing.T) {
         }
     }
 
+
+    // initialize the map
+    m := make(map[string] int)
+    for _,v := range(cs) { m[string(v)] = 0 }
+
+    // run the Each function, which should increment the value 
     symset.Each(func(s *Symbol) error {
-        buffer.WriteString(s.String())
+        if v, ok := m[s.String()]; ok == true {
+            m[s.String()] = v + 1
+        } else {
+            t.Errorf("encountered unknown symbol \"%s\"", s.String())
+        }
         return nil
     })
-    order := buffer.String()
-    if len(cs) != len(order) {
-        // the order is not really important, but now we must make sure
-        // each rune of cs is in the string order
-        // TODO: this still needs to be implemented.
-        t.Errorf("expected %s as symbols, got %s", cs, order)
+
+    // finally, check that each entry in the map has value=1
+    for k,v := range(m) {
+        if v != 1 {
+            if v == 0 {
+                t.Errorf("symbol \"%s\" was expected, but never visited.", k)
+            } else {
+                t.Errorf("symbol \"%s\" was visited %d times instead of once.", k, v)
+            }
+        }
     }
 }
 
