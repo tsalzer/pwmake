@@ -11,13 +11,44 @@ import (
 
 // A symbol set.
 // An unordered set of symbols.
+// Ideally, this would be something like this:
+//   type SymbolSet struct {
+//       symbols map[*Symbol] struct{}
+//   }
+// Unfortunately, we need to impose some kind of order to the set, since we want
+// to be able to pick a random symbol from it, which is most easy if the symbols
+// are stored in a vector (array) of known size, so we can simply pick the symbol
+// stored at a given index. Which allows us to utilize the known random functions.
+// Therefor, the symbols are stored in an array:
 type SymbolSet struct {
-    symbols map[*Symbol] struct{}
+    symbols []*Symbol
 }
+
+// a map of default symbol sets.
+var symbolsets = make(map[string] *SymbolSet)
+// initialize all charsets we know
+func InitializeSymbolSets() {
+    symbolsets["alpha"],_     = NewSymbolSetFromString("abcdefghijklmnopqrstuvwxyz")
+    symbolsets["ALPHA"],_     = NewSymbolSetFromString("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+    symbolsets["num"],_       = NewSymbolSetFromString("0123456789")
+    symbolsets["specials"],_  = NewSymbolSetFromString(",.!?#@/+-*$%&()")
+}
+// get the charset with a given name.
+func GetSymbolSet(name string) (*SymbolSet, error) {
+    var retval *SymbolSet
+    var ok bool
+    if retval,ok = symbolsets[name]; ok == false {
+        return nil, fmt.Errorf("no symbol set with name %s known", name)
+    }
+    return retval, nil
+}
+
+//////////////////////////////////////////////////////////////////////
 
 func NewSymbolSet() *SymbolSet {
     retval := new(SymbolSet)
-    retval.symbols = make(map[*Symbol] struct{})
+    //retval.symbols = make(map[*Symbol] struct{})
+    retval.symbols = []*Symbol{}
     return retval
 }
 
@@ -28,11 +59,18 @@ func (p *SymbolSet) Put(symbol *Symbol) error {
         panic("Something strange happened: Got a SymboSet with nil symbols.")
     }
 
-    if _, ok := p.symbols[symbol]; ok == true {
-        return fmt.Errorf("There already is a symbol \"%s\" in this symbol set", symbol)
-    }
-    p.symbols[symbol] = struct{}{}
+    // if _, ok := p.symbols[symbol]; ok == true {
+    //     return fmt.Errorf("There already is a symbol \"%s\" in this symbol set", symbol)
+    // }
+    // p.symbols[symbol] = struct{}{}
     //p.symbols = append(p.symbols, symbol)
+
+    for _,v := range(p.symbols) {
+        if v == symbol {
+            return fmt.Errorf("There already is a symbol \"%s\" in this symbol set", symbol)
+        }
+    }
+    p.symbols = append(p.symbols, symbol)
     return nil
 }
 
@@ -44,7 +82,7 @@ func (p *SymbolSet) Len() int {
 // convert the symbol set into a single string.
 func (p *SymbolSet) String() string {
     var buffer bytes.Buffer
-    for v,_ := range(p.symbols) {
+    for _,v := range(p.symbols) {
         buffer.WriteString(v.String())
     }
     return buffer.String()
@@ -54,7 +92,7 @@ func (p *SymbolSet) String() string {
 // cancels operation as soon as the function returns an error.
 func (p *SymbolSet) Each(fn func(s *Symbol) error) error {
     var err error
-    for symbol,_ := range(p.symbols) {
+    for _, symbol := range(p.symbols) {
         if err = fn(symbol) ; err != nil {
             return err
         }
@@ -79,6 +117,11 @@ func(p *SymbolSet) ContainsString(cmp string) bool {
         return nil
     })
     return err != nil
+}
+
+// get a single random symbol from the set.
+func (p *SymbolSet) RandomSymbol() *Symbol {
+    return p.symbols[0]
 }
 
 // create a new SymbolSet from symbols.
