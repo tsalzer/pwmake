@@ -22,6 +22,7 @@ import (
 // Therefor, the symbols are stored in an array:
 type SymbolSet struct {
     symbols []*Symbol
+    fnRandom func(int) int
 }
 
 // a map of default symbol sets.
@@ -49,6 +50,8 @@ func NewSymbolSet() *SymbolSet {
     retval := new(SymbolSet)
     //retval.symbols = make(map[*Symbol] struct{})
     retval.symbols = []*Symbol{}
+    // use the default randomizer
+    retval.fnRandom = DefaultRandom
     return retval
 }
 
@@ -121,7 +124,11 @@ func(p *SymbolSet) ContainsString(cmp string) bool {
 
 // get a single random symbol from the set.
 func (p *SymbolSet) RandomSymbol() *Symbol {
-    return p.symbols[0]
+    maxidx := len(p.symbols)
+    if p.fnRandom == nil {
+        panic("no randomize function configured")
+    }
+    return p.symbols[p.fnRandom(maxidx)]
 }
 
 // create a new SymbolSet from symbols.
