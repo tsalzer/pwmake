@@ -28,14 +28,14 @@ func init() {
 // to the user.
 func PrintPassword() error {
     var gen *pwdgen.PwdGen
-    var cs *pwdgen.Charset
+    var symset *pwdgen.SymbolSet
     var err error
 
-    if cs, err = pwdgen.GetCharset("alpha"); err != nil {
+    if symset, err = pwdgen.GetSymbolSet("alpha"); err != nil {
         return err
     }
 
-    if gen, err = pwdgen.NewPwdGen(cs, flagLength); err != nil {
+    if gen, err = pwdgen.NewPwdGen(symset, flagLength); err != nil {
        return err
     }
     fmt.Printf("%s\n", gen)

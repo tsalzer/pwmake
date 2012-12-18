@@ -16,6 +16,11 @@ func InitializeRandomizer() {
     rand.Seed(time.Now().UTC().UnixNano())
 }
 
+// default random function.
+func DefaultRandom(maxval int) int {
+    return rand.Intn(maxval);
+}
+
 // get a random rune from a given string.
 func RandomRune(charset string) rune {
     var retval rune

@@ -10,8 +10,8 @@ import (
 
 func TestStringLength(t *testing.T) {
     const testlen = 30
-    cs := NewCharset("a")
-    gen, _ := NewPwdGen(cs, testlen)
+    sym,_ := NewSymbolSetFromString("a")
+    gen, _ := NewPwdGen(sym, testlen)
     if (gen == nil) {
         t.Errorf("failed to create PwdGen instance")
     }

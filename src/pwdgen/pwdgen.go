@@ -7,10 +7,11 @@ package pwdgen
 
 import (
     "fmt"
+    "bytes"
 )
 
 type PwdGen struct {
-    charset *Charset
+    symbols *SymbolSet
     length int
 }
 
@@ -22,26 +23,26 @@ func init() {
     InitializeRandomizer()
 
     // initialize charsets
-    InitializeCharsets()
+    InitializeSymbolSets()
 }
 
 // Constructor for Password Generators.
-func NewPwdGen(charset *Charset, length int) (*PwdGen, error) {
+func NewPwdGen(symbols *SymbolSet, length int) (*PwdGen, error) {
     if length < 1 {
         return nil, fmt.Errorf("the minimum length of a password is 1, you provided %d.", length)
     }
     retval := new(PwdGen)
-    retval.charset = charset
+    retval.symbols = symbols
     retval.length = length
     return retval, nil
 }
 
 // Generate a fresh password string.
 func (p *PwdGen) String() string {
-    retval := ""
-    for c := 0; c < p.length; c++ {
-        retval += p.charset.RandomChar()
+    var buffer bytes.Buffer
+    for i:= 0; i < p.length; i++ {
+        buffer.WriteString(p.symbols.RandomSymbol().String())
     }
-    return retval
+    return buffer.String()
 }
 
