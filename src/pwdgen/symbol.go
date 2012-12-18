@@ -20,7 +20,7 @@ type Symbol struct {
 // A symbol set.
 // An unordered set of symbols.
 type SymbolSet struct {
-    symbols map[*Symbol] struct {}
+    symbols map[*Symbol] struct{}
 }
 
 // Constructor.
@@ -33,12 +33,18 @@ func NewSymbol(chars string) *Symbol {
 }
 
 func NewSymbolSet() *SymbolSet {
-    return new(SymbolSet)
+    retval := new(SymbolSet)
+    retval.symbols = make(map[*Symbol] struct{})
+    return retval
 }
 
 // put a single symbol into a symbol set.
 // returns an error if the symbol already is in the set.
 func (p *SymbolSet) Put(symbol *Symbol) error {
+    if p.symbols == nil {
+        panic("Something strange happened: Got a SymboSet with nil symbols.")
+    }
+
     if _, ok := p.symbols[symbol]; ok == true {
         return fmt.Errorf("There already is a symbol \"%s\" in this symbol set", symbol)
     }
@@ -95,6 +101,9 @@ func(p *SymbolSet) ContainsString(cmp string) bool {
 // create a new SymbolSet from symbols.
 func NewSymbolSetFromSymbols(symbols []*Symbol) (*SymbolSet, error) {
     retval := NewSymbolSet()
+    if retval == nil {
+        panic("did not get a symbol set from NewSymbolSet.")
+    }
     var err error
     //return retval, nil
     for _, val := range(symbols) {
