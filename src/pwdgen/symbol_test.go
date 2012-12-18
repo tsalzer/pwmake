@@ -56,11 +56,11 @@ func TestEachSymbol(t *testing.T) {
         return nil
     })
     order := buffer.String()
-    if order != cs {
+    if len(cs) != len(order) {
         // the order is not really important, but now we must make sure
         // each rune of cs is in the string order
         // TODO: this still needs to be implemented.
-        t.Errorf("unexpected behavior of Each: visited in order %s", order)
+        t.Errorf("expected %s as symbols, got %s", cs, order)
     }
 }
 

@@ -20,7 +20,7 @@ type Symbol struct {
 // A symbol set.
 // An unordered set of symbols.
 type SymbolSet struct {
-    symbols []*Symbol
+    symbols map[*Symbol] struct{}
 }
 
 // Constructor.
@@ -33,13 +33,23 @@ func NewSymbol(chars string) *Symbol {
 }
 
 func NewSymbolSet() *SymbolSet {
-    return new(SymbolSet)
+    retval := new(SymbolSet)
+    retval.symbols = make(map[*Symbol] struct{})
+    return retval
 }
 
 // put a single symbol into a symbol set.
 // returns an error if the symbol already is in the set.
 func (p *SymbolSet) Put(symbol *Symbol) error {
-    p.symbols = append(p.symbols, symbol)
+    if p.symbols == nil {
+        panic("Something strange happened: Got a SymboSet with nil symbols.")
+    }
+
+    if _, ok := p.symbols[symbol]; ok == true {
+        return fmt.Errorf("There already is a symbol \"%s\" in this symbol set", symbol)
+    }
+    p.symbols[symbol] = struct{}{}
+    //p.symbols = append(p.symbols, symbol)
     return nil
 }
 
@@ -51,7 +61,7 @@ func (p *SymbolSet) Len() int {
 // convert the symbol set into a single string.
 func (p *SymbolSet) String() string {
     var buffer bytes.Buffer
-    for _,v := range(p.symbols) {
+    for v,_ := range(p.symbols) {
         buffer.WriteString(v.String())
     }
     return buffer.String()
@@ -61,7 +71,7 @@ func (p *SymbolSet) String() string {
 // cancels operation as soon as the function returns an error.
 func (p *SymbolSet) Each(fn func(s *Symbol) error) error {
     var err error
-    for _, symbol := range(p.symbols) {
+    for symbol,_ := range(p.symbols) {
         if err = fn(symbol) ; err != nil {
             return err
         }
@@ -91,6 +101,9 @@ func(p *SymbolSet) ContainsString(cmp string) bool {
 // create a new SymbolSet from symbols.
 func NewSymbolSetFromSymbols(symbols []*Symbol) (*SymbolSet, error) {
     retval := NewSymbolSet()
+    if retval == nil {
+        panic("did not get a symbol set from NewSymbolSet.")
+    }
     var err error
     //return retval, nil
     for _, val := range(symbols) {
