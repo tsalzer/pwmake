@@ -23,7 +23,6 @@ func init() {
     InitializeRandomizer()
 
     // initialize charsets
-    InitializeCharsets()
     InitializeSymbolSets()
 }
 
