@@ -1,4 +1,4 @@
-package pwdgen
+package rand
 
 import (
     "testing"

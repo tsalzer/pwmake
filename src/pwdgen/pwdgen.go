@@ -9,6 +9,7 @@ import (
     "fmt"
     "bytes"
     "pwdgen/symbol"
+    "pwdgen/rand"
 )
 
 type PwdGen struct {
@@ -21,10 +22,10 @@ type PwdGen struct {
 // strong random number generator.
 func init() {
     // initialize random seed
-    InitializeRandomizer()
+    rand.InitializeRandomizer()
 
     // initialize symbols
-    symbol.Initialize(DefaultRandom)
+    symbol.Initialize(rand.DefaultRandom)
 }
 
 // Constructor for Password Generators.

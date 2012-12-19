@@ -2,8 +2,14 @@ package symbol
 
 import (
     "testing"
+    "pwdgen/rand"
 )
 
+// init function for tests.
+// TODO: find out if this is really only used by the tests
+func init() {
+    Initialize(rand.DefaultRandom)
+}
 
 // func TestNewSymbolSet(t *testing.T) {
 //     t.Errorf("test not implemented")
