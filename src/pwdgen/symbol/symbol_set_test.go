@@ -1,4 +1,4 @@
-package pwdgen
+package symbol
 
 import (
     "testing"
