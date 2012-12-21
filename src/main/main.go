@@ -10,6 +10,7 @@ import (
     "fmt"
     "os"
     "pwdgen"
+    "pwdgen/symbol"
 )
 
 var flagLength int
@@ -28,10 +29,10 @@ func init() {
 // to the user.
 func PrintPassword() error {
     var gen *pwdgen.PwdGen
-    var symset *pwdgen.SymbolSet
+    var symset *symbol.SymbolSet
     var err error
 
-    if symset, err = pwdgen.GetSymbolSet("alpha"); err != nil {
+    if symset, err = symbol.GetSymbolSet("alpha"); err != nil {
         return err
     }
 

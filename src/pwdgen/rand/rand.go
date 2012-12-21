@@ -2,7 +2,9 @@
  * Randomizer
  */
 
-package pwdgen
+// The random package for the password generator.
+// This package contains the random function used for generating passwords.
+package rand
 
 import (
 //    "crypto/rand"
@@ -20,17 +22,4 @@ func InitializeRandomizer() {
 func DefaultRandom(maxval int) int {
     return rand.Intn(maxval);
 }
-
-// get a random rune from a given string.
-func RandomRune(charset string) rune {
-    var retval rune
-
-    maxidx := len(charset)
-    idx := rand.Intn(maxidx)
-    retval = rune(charset[idx])
-
-    return retval
-}
-
-
 

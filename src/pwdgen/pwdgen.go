@@ -8,10 +8,12 @@ package pwdgen
 import (
     "fmt"
     "bytes"
+    "pwdgen/symbol"
+    "pwdgen/rand"
 )
 
 type PwdGen struct {
-    symbols *SymbolSet
+    symbols *symbol.SymbolSet
     length int
 }
 
@@ -20,14 +22,14 @@ type PwdGen struct {
 // strong random number generator.
 func init() {
     // initialize random seed
-    InitializeRandomizer()
+    rand.InitializeRandomizer()
 
-    // initialize charsets
-    InitializeSymbolSets()
+    // initialize symbols
+    symbol.Initialize(rand.DefaultRandom)
 }
 
 // Constructor for Password Generators.
-func NewPwdGen(symbols *SymbolSet, length int) (*PwdGen, error) {
+func NewPwdGen(symbols *symbol.SymbolSet, length int) (*PwdGen, error) {
     if length < 1 {
         return nil, fmt.Errorf("the minimum length of a password is 1, you provided %d.", length)
     }

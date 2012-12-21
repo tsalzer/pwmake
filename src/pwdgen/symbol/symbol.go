@@ -2,7 +2,32 @@
  * Symbol
  */
 
-package pwdgen
+// The symbol package.
+// This is a utility package handling all the stuff we might need
+// when using symbols. The main exposed types are Symbol and
+// SymbolSet.
+//
+// The only important thing to do when using this package is to
+// initialize it, which will provide a randomizing function. This
+// package does not have its own randomizer, and will (at this point)
+// not automatically fall back to math/random.
+
+package symbol
+
+func init() {
+    // initialize symbol sets.
+    InitializeSymbolSets()
+}
+
+// default random function
+var fnDefaultRandom func(int) int
+
+// initialize symbols.
+// We need this to initialize the random function.
+func Initialize(fnRandom func(int) int) {
+    fnDefaultRandom = fnRandom
+}
+
 
 // A symbol.
 // Basically, a symbol is a string. In most cases, its a single rune

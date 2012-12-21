@@ -2,7 +2,7 @@
  * Symbol Sets
  */
 
-package pwdgen
+package symbol
 
 import (
     "bytes"
@@ -50,8 +50,7 @@ func NewSymbolSet() *SymbolSet {
     retval := new(SymbolSet)
     //retval.symbols = make(map[*Symbol] struct{})
     retval.symbols = []*Symbol{}
-    // use the default randomizer
-    retval.fnRandom = DefaultRandom
+    // by leaving fnRandom = nil, we'll use the default randomizer
     return retval
 }
 
@@ -125,10 +124,13 @@ func(p *SymbolSet) ContainsString(cmp string) bool {
 // get a single random symbol from the set.
 func (p *SymbolSet) RandomSymbol() *Symbol {
     maxidx := len(p.symbols)
-    if p.fnRandom == nil {
+    if p.fnRandom == nil && fnDefaultRandom == nil{
         panic("no randomize function configured")
     }
-    return p.symbols[p.fnRandom(maxidx)]
+    if p.fnRandom != nil {
+        return p.symbols[p.fnRandom(maxidx)]
+    }
+    return p.symbols[fnDefaultRandom(maxidx)]
 }
 
 // create a new SymbolSet from symbols.

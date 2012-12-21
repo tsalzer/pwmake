@@ -6,11 +6,12 @@ package pwdgen
 
 import (
     "testing"
+    "pwdgen/symbol"
 )
 
 func TestStringLength(t *testing.T) {
     const testlen = 30
-    sym,_ := NewSymbolSetFromString("a")
+    sym,_ := symbol.NewSymbolSetFromString("a")
     gen, _ := NewPwdGen(sym, testlen)
     if (gen == nil) {
         t.Errorf("failed to create PwdGen instance")

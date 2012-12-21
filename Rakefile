@@ -7,6 +7,8 @@ PROJECTROOT=File.dirname(__FILE__)
 #TEST_VERBOSE="-v"
 TEST_VERBOSE=""
 
+PKGS="main pwdgen pwdgen/symbol pwdgen/rand"
+
 task :default do
     with_env do 
         system("echo \"GOPATH is $GOPATH\"")
@@ -20,8 +22,8 @@ end
 task :test do
     with_env do 
         system("echo \"GOPATH is $GOPATH\"")
-        puts "go test #{TEST_VERBOSE} main pwdgen"
-        system("go test #{TEST_VERBOSE} main pwdgen")
+        puts "go test #{TEST_VERBOSE} #{PKGS}"
+        system("go test #{TEST_VERBOSE} #{PKGS}")
         fail unless $? == 0
     end
 
