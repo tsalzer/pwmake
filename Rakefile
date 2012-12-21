@@ -7,7 +7,7 @@ PROJECTROOT=File.dirname(__FILE__)
 #TEST_VERBOSE="-v"
 TEST_VERBOSE=""
 
-PKGS="main pwdgen pwdgen/symbol pwdgen/rand"
+PKGS="main pwdgen pwdgen/rand pwdgen/stats pwdgen/symbol"
 
 task :default do
     with_env do 
