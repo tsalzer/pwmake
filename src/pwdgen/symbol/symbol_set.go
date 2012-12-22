@@ -44,6 +44,13 @@ func GetSymbolSet(name string) (*SymbolSet, error) {
     return retval, nil
 }
 
+// iterate over all symbol sets.
+func EachSymbolSet(fn func(name string, symset *SymbolSet)) {
+    for name, symset := range(symbolsets) {
+        fn(name, symset)
+    }
+}
+
 //////////////////////////////////////////////////////////////////////
 
 func NewSymbolSet() *SymbolSet {
