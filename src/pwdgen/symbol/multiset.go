@@ -7,6 +7,7 @@ import (
 // A set of SymbolSets.
 type MultiSet struct {
     symsets []*SymbolSet
+    fnRandom func(int) int
 }
 
 // construct a new MultiSet.
@@ -48,5 +49,17 @@ func (p *MultiSet) Len() int {
         retval += v.Len()
     }
     return retval
+}
+
+// get a single random symbol from the multiset.
+func (p *MultiSet) RandomSymbol() *Symbol {
+    maxidx := len(p.symsets)
+    if p.fnRandom == nil && fnDefaultRandom == nil{
+        panic("no randomize function configured")
+    }
+    if p.fnRandom != nil {
+        return p.symsets[p.fnRandom(maxidx)].RandomSymbol()
+    }
+    return p.symsets[fnDefaultRandom(maxidx)].RandomSymbol()
 }
 

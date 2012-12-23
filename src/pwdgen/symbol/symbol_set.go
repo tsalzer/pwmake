@@ -9,6 +9,11 @@ import (
     "fmt"
 )
 
+// Interface for all of our classes providing random symbols
+type RandomSymboler interface {
+    RandomSymbol() *Symbol
+}
+
 // A symbol set.
 // An unordered set of symbols.
 // Ideally, this would be something like this:
