@@ -7,3 +7,8 @@
 # compiled code
 mpw
 
+# IDEA files
+*.iml
+.idea/*
+out/*
+
