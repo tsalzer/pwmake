@@ -33,3 +33,54 @@ func TestMultiSetErrors(t *testing.T) {
     }
 }
 
+func TestGetContainingSet(t *testing.T) {
+	symsets := make(map[string] *SymbolSet)
+	setnames := []string{"alpha", "ALPHA", "num"}
+	specials,_ := GetSymbolSet("specials")
+	ms,_ := NewMultiSetFromDefaults( setnames )
+
+	for _,name := range(setnames) {
+		symsets[name],_ = GetSymbolSet(name)
+	}
+
+	// positive checks
+	for name,symset := range(symsets) {
+		symset.Each(func(symbol *Symbol) error {
+			if s,err := ms.GetContainingSet(symbol); s != symset || err != nil {
+				t.Errorf("symbol %s should be located in symbol set %s, but was in %s (error was: %s)", symbol, name, s, err)
+			}
+			return nil // we want to check all symbols, not break after the first error
+		})
+	}
+
+	// negative checks
+	specials.Each(func(symbol *Symbol) error {
+		if s,err := ms.GetContainingSet(symbol); s != nil || err == nil {
+			t.Errorf("symbol %s should not be in any set, but was located in set %v (error was: %s)", s, err)
+		}
+		return nil // we want to check all symbols
+	})
+}
+
+// TODO: implement this test
+// make sure the random set selection selects each symbol set the multiset consists of.
+//func TestMultiSetRandomSetSelection(t *testing.T) {
+//	const numsamples = 1000
+//	const setnames = []string{"alpha", "ALPHA", "num"}
+//	ms,_ := NewMultiSetFromDefaults( setnames )
+//
+//	m := map[string] int{
+//		"alpha" : 0,
+//		"ALPHA"	: 0,
+//		"num"	: 0,
+//	}
+//
+//	for i := 0; i < numsamples; i++ {
+//		sym := ms.RandomSymbol()
+//		for k,v := range(m){
+//			if ms.symsets[k].Contains(sym) {
+//				v++
+//			}
+//		}
+//	}
+//}

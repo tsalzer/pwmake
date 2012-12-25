@@ -63,3 +63,12 @@ func (p *MultiSet) RandomSymbol() *Symbol {
     return p.symsets[fnDefaultRandom(maxidx)].RandomSymbol()
 }
 
+// get the symbol set containing the given stringer.
+func (p *MultiSet) GetContainingSet(symbol fmt.Stringer) (*SymbolSet, error) {
+	for _,v := range(p.symsets) {
+		if v.Contains(symbol) {
+			return v, nil
+		}
+	}
+	return nil, fmt.Errorf("Symbol %s not contained in any SymbolSet of this MultiSet", symbol)
+}
