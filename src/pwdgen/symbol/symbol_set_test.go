@@ -11,6 +11,34 @@ func init() {
     Initialize(rand.DefaultRandom)
 }
 
+// check that all the basic symbol sets are found.
+func TestEachSymbolSet(t *testing.T) {
+    m := map[string] bool {
+        "alpha" : false,
+        "ALPHA" : false,
+        "num" : false,
+        "specials" : false,
+    }
+
+    //for k,_ := range(m) { m[k] = false }
+
+    EachSymbolSet(func(name string, symset *SymbolSet) {
+        val := m[name]
+        if val == true {
+            t.Errorf("symbol set %s visited twice", name)
+        } else {
+            m[name] = true
+        }
+    })
+
+    for k,v := range(m) {
+        if v == false {
+            t.Errorf("symbol set named %s was not visited", k)
+        }
+    }
+}
+
+
 // func TestNewSymbolSet(t *testing.T) {
 //     t.Errorf("test not implemented")
 // }

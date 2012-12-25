@@ -29,10 +29,11 @@ func init() {
 // to the user.
 func PrintPassword() error {
     var gen *pwdgen.PwdGen
-    var symset *symbol.SymbolSet
+    var symset *symbol.MultiSet
     var err error
 
-    if symset, err = symbol.GetSymbolSet("alpha"); err != nil {
+    //if symset, err = symbol.GetSymbolSet("alpha"); err != nil {
+    if symset, err = symbol.NewMultiSetFromDefaults([]string{"alpha", "ALPHA", "num"}); err != nil {
         return err
     }
 

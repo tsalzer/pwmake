@@ -13,7 +13,7 @@ import (
 )
 
 type PwdGen struct {
-    symbols *symbol.SymbolSet
+    symbols symbol.RandomSymboler
     length int
 }
 
@@ -29,7 +29,7 @@ func init() {
 }
 
 // Constructor for Password Generators.
-func NewPwdGen(symbols *symbol.SymbolSet, length int) (*PwdGen, error) {
+func NewPwdGen(symbols symbol.RandomSymboler, length int) (*PwdGen, error) {
     if length < 1 {
         return nil, fmt.Errorf("the minimum length of a password is 1, you provided %d.", length)
     }

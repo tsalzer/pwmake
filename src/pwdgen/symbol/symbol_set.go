@@ -9,6 +9,11 @@ import (
     "fmt"
 )
 
+// Interface for all of our classes providing random symbols
+type RandomSymboler interface {
+    RandomSymbol() *Symbol
+}
+
 // A symbol set.
 // An unordered set of symbols.
 // Ideally, this would be something like this:
@@ -42,6 +47,13 @@ func GetSymbolSet(name string) (*SymbolSet, error) {
         return nil, fmt.Errorf("no symbol set with name %s known", name)
     }
     return retval, nil
+}
+
+// iterate over all symbol sets.
+func EachSymbolSet(fn func(name string, symset *SymbolSet)) {
+    for name, symset := range(symbolsets) {
+        fn(name, symset)
+    }
 }
 
 //////////////////////////////////////////////////////////////////////
