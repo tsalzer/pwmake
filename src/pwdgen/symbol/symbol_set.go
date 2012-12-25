@@ -102,7 +102,7 @@ func (p *SymbolSet) Each(fn func(s *Symbol) error) error {
     return err
 }
 
-// check if the given Stringer is conainet in the set.
+// check if the given Stringer is contained in the set.
 func (p *SymbolSet) Contains(s fmt.Stringer) bool {
     return p.ContainsString(s.String())
 }
