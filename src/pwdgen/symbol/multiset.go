@@ -65,14 +65,24 @@ func (p *MultiSet) RandomSymbol() *Symbol {
 
 // get the symbol set containing the given stringer.
 func (p *MultiSet) GetContainingSet(symbol fmt.Stringer) (*SymbolSet, error) {
+	var retval *SymbolSet
+
 	ch := make(chan *SymbolSet)
+
+	// helper function
+	isContained := func (symset *SymbolSet){
+		if symset.Contains(symbol) {
+			ch <- symset
+		} else {
+			ch <- nil
+		}
+	}
 
 	// launch n goroutines
 	for _,v := range(p.symsets) {
-		go isContained(ch, symbol, v)
+		go isContained(v)
 	}
 
-	var retval *SymbolSet
 	// collect n results
 	for _,_ = range(p.symsets){
 		if x := <-ch; x != nil && retval == nil {
@@ -86,10 +96,3 @@ func (p *MultiSet) GetContainingSet(symbol fmt.Stringer) (*SymbolSet, error) {
 	return retval, nil
 }
 
-func isContained(ch chan *SymbolSet, symbol fmt.Stringer, symset *SymbolSet){
-	if symset.Contains(symbol) {
-		ch <- symset
-	} else {
-		ch <- nil
-	}
-}
