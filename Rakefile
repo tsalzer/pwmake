@@ -10,24 +10,17 @@ TEST_VERBOSE=""
 PKGS="main pwdgen pwdgen/symbol pwdgen/rand"
 
 task :default do
-    with_env do 
-        system("echo \"GOPATH is $GOPATH\"")
-        puts "go build -o mpw main"
-        system("go build -o mpw main")
-        fail unless $? == 0
-    end
-
+    run_go("build -o mpw main")
 end
 
 task :test do
-    with_env do 
-        system("echo \"GOPATH is $GOPATH\"")
-        puts "go test #{TEST_VERBOSE} #{PKGS}"
-        system("go test #{TEST_VERBOSE} #{PKGS}")
-        fail unless $? == 0
-    end
-
+    run_go("test #{TEST_VERBOSE} #{PKGS}")
 end
+
+task :doc do
+    run_go("doc #{TEST_VERBOSE} #{PKGS}")
+end
+
 
 task :http do
     with_env do
@@ -39,6 +32,15 @@ end
 
 task :clean do
     File.unlink("#{PROJECTROOT}/mpw")
+end
+
+def run_go(args)
+    with_env do
+        system("echo \"GOPATH is $GOPATH\"")
+        puts "go #{args}"
+        system("go #{args}")
+        fail unless $? == 0
+    end
 end
 
 def with_env(&blk)
