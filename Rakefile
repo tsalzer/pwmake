@@ -17,6 +17,10 @@ task :test do
     run_go("test #{TEST_VERBOSE} #{PKGS}")
 end
 
+task :bench do
+    run_go("test -test.bench 'Benchmark.*' #{TEST_VERBOSE} #{PKGS}")
+end
+
 task :doc do
     run_go("doc #{TEST_VERBOSE} #{PKGS}")
 end
