@@ -23,30 +23,30 @@ end
 
 
 task :http do
-    with_env do
-        puts "godoc -http=:6060 -path=\"#{PROJECTROOT}/src\""
-        system("godoc -http=:6060 -path=\"#{PROJECTROOT}/src\"")
-        fail unless $? == 0
-    end
+    run_line("godoc -http=:6060 -path=\"#{PROJECTROOT}/src\"")
 end
 
 task :clean do
     File.unlink("#{PROJECTROOT}/mpw")
 end
 
-def run_go(args)
+def run_line(line)
     with_env do
-        system("echo \"GOPATH is $GOPATH\"")
-        puts "go #{args}"
-        system("go #{args}")
+        #system("echo \"GOPATH is $GOPATH\"")
+        puts "#{line}"
+        system("#{line}")
         fail unless $? == 0
     end
+end
+
+def run_go(args)
+    run_line("go #{args}")
 end
 
 def with_env(&blk)
     oldpath=ENV["GOPATH"]
     ENV["GOPATH"]="#{PROJECTROOT}:#{oldpath}"
-    puts "gopath: #{ENV['GOPATH']}"
+    #puts "gopath: #{ENV['GOPATH']}"
     blk.call
 
     ENV["GOPATH"]=oldpath
