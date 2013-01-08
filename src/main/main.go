@@ -24,24 +24,35 @@ func init() {
 }
 
 // print the password.
-// This will generate a password with the given specifications, and print it.
+// This will use GeneratePassword to generate a password.
 // Any error from the password generator will be relayed here and can be printed
 // to the user.
 func PrintPassword() error {
+    if pwd, err := pwdgen.GeneratePassword(flagLength); err != nil {
+        return err
+    } else {
+        fmt.Printf("%s\n", pwd)
+    }
+    return nil
+}
+
+// generate the password,
+// This will generate a password with the given specifications, and return it.
+// Any error from the password generator will be relayed here and can be printed
+// to the user.
+func _GeneratePassword() (string,error) {
     var gen *pwdgen.PwdGen
     var symset *symbol.MultiSet
     var err error
 
-    //if symset, err = symbol.GetSymbolSet("alpha"); err != nil {
     if symset, err = symbol.NewMultiSetFromDefaults([]string{"alpha", "ALPHA", "num"}); err != nil {
-        return err
+        return "",err
     }
 
     if gen, err = pwdgen.NewPwdGen(symset, flagLength); err != nil {
-       return err
+       return "",err
     }
-    fmt.Printf("%s\n", gen)
-    return nil
+    return gen.String(),nil
 }
 
 // main.

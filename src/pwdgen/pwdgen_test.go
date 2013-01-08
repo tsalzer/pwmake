@@ -23,3 +23,15 @@ func TestStringLength(t *testing.T) {
     }
 }
 
+// --- BENCHMARKS ---------------------------------------------------
+
+func BenchmarkGeneratePassword(b *testing.B) {
+    length := 10
+    for i := 0; i < b.N; i++ {
+        if s,err := GeneratePassword(length); err != nil || len(s) != length {
+            b.Errorf("Generating password failed: Password is \"%s\" (expected %d characters), error is %s",
+                s, length, err)
+        }
+    }
+}
+

@@ -33,18 +33,6 @@ func TestMultiSetErrors(t *testing.T) {
     }
 }
 
-func generateMultisetTestSet() (*MultiSet, map[string] *SymbolSet) {
-	symsets := make(map[string] *SymbolSet)
-	setnames := []string{"alpha", "ALPHA", "num"}
-	ms,_ := NewMultiSetFromDefaults( setnames )
-
-	for _,name := range(setnames) {
-		symsets[name],_ = GetSymbolSet(name)
-	}
-
-    return ms, symsets
-}
-
 func TestGetContainingSet(t *testing.T) {
     ms, symsets := generateMultisetTestSet()
 	specials,_ := GetSymbolSet("specials")
@@ -67,6 +55,22 @@ func TestGetContainingSet(t *testing.T) {
 		return nil // we want to check all symbols
 	})
 }
+// Helpers
+
+func generateMultisetTestSet() (*MultiSet, map[string] *SymbolSet) {
+	symsets := make(map[string] *SymbolSet)
+	setnames := []string{"alpha", "ALPHA", "num"}
+	ms,_ := NewMultiSetFromDefaults( setnames )
+
+	for _,name := range(setnames) {
+		symsets[name],_ = GetSymbolSet(name)
+	}
+
+    return ms, symsets
+}
+
+
+// --- BENCHMARKS ---------------------------------------------------
 
 func BenchmarkGetContainingSet(b *testing.B) {
     b.StopTimer()
