@@ -20,25 +20,25 @@ I don't believe in depending on unspecified, unversioned external
 packages). Once this is done, we have to support the following
 options:
 
-  mpw [ OPTION ] [ pwlength ] [ numpw ]
-
-  -0, --no-numerals     - no numbers
-  -1                    - one password per line
-  -A, --no-capitalize   - no need for capital letters?
-  -a, --alt-phonics     - simply ignore
-  -B, --ambigous        - no letters which might be confused
-  -c, --capitalize      - at least one capital letter
-  -C                    - print output in columns
-  -N, --num-password=NUM    - generate NUM passwords
-  -n, --numerals        - at least one number
-  -H, --sha1=PATH[#SEED]    - seed with hash of file PATH[#SEED]
-  -h, --help            - help
-  -s, --secure          - completely random
-  -v, --no-vowels       - no vowels (or numbers mistaken for vowels)
-  -y, --symbols         - at least one special character
+    mpw [ OPTION ] [ pwlength ] [ numpw ]
+    
+    -0, --no-numerals     - no numbers
+    -1                    - one password per line
+    -A, --no-capitalize   - no need for capital letters?
+    -a, --alt-phonics     - simply ignore
+    -B, --ambigous        - no letters which might be confused
+    -c, --capitalize      - at least one capital letter
+    -C                    - print output in columns
+    -N, --num-password=NUM    - generate NUM passwords
+    -n, --numerals        - at least one number
+    -H, --sha1=PATH[#SEED]    - seed with hash of file PATH[#SEED]
+    -h, --help            - help
+    -s, --secure          - completely random
+    -v, --no-vowels       - no vowels (or numbers mistaken for vowels)
+    -y, --symbols         - at least one special character
 
 This is extracted from the man page of pwgen by
-Theodore Ts'o <tytso@alum.mit.edu>.
+Theodore Ts'o (<tytso@alum.mit.edu>.)
 
 Note that we will probably not be "compatible" with pwgen, as our
 generator is likely to be different from the pwgen generator, so
