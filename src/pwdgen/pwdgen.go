@@ -48,3 +48,23 @@ func (p *PwdGen) String() string {
     return buffer.String()
 }
 
+// generate the password,
+// This will generate a password with the given specifications, and return it.
+// Any error from the password generator will be relayed here and can be printed
+// to the user.
+func GeneratePassword(length int) (string,error) {
+    var gen *PwdGen
+    var symset *symbol.MultiSet
+    var err error
+
+    if symset, err = symbol.NewMultiSetFromDefaults([]string{"alpha", "ALPHA", "num"}); err != nil {
+        return "",err
+    }
+
+    if gen, err = NewPwdGen(symset, length); err != nil {
+       return "",err
+    }
+    return gen.String(),nil
+}
+
+

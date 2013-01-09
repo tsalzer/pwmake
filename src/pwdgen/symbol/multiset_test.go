@@ -34,14 +34,8 @@ func TestMultiSetErrors(t *testing.T) {
 }
 
 func TestGetContainingSet(t *testing.T) {
-	symsets := make(map[string] *SymbolSet)
-	setnames := []string{"alpha", "ALPHA", "num"}
+    ms, symsets := generateMultisetTestSet()
 	specials,_ := GetSymbolSet("specials")
-	ms,_ := NewMultiSetFromDefaults( setnames )
-
-	for _,name := range(setnames) {
-		symsets[name],_ = GetSymbolSet(name)
-	}
 
 	// positive checks
 	for name,symset := range(symsets) {
@@ -60,6 +54,36 @@ func TestGetContainingSet(t *testing.T) {
 		}
 		return nil // we want to check all symbols
 	})
+}
+// Helpers
+
+func generateMultisetTestSet() (*MultiSet, map[string] *SymbolSet) {
+	symsets := make(map[string] *SymbolSet)
+	setnames := []string{"alpha", "ALPHA", "num"}
+	ms,_ := NewMultiSetFromDefaults( setnames )
+
+	for _,name := range(setnames) {
+		symsets[name],_ = GetSymbolSet(name)
+	}
+
+    return ms, symsets
+}
+
+
+// --- BENCHMARKS ---------------------------------------------------
+
+func BenchmarkGetContainingSet(b *testing.B) {
+    b.StopTimer()
+    ms, _ := generateMultisetTestSet()
+    symbol := NewSymbol("m")
+    b.StartTimer()
+
+	// only the positive checks
+    for i := 0; i < b.N; i++ {
+        if _,err := ms.GetContainingSet(symbol); err != nil {
+            b.Errorf("symbol %s was not found: %s", symbol, err)
+        }
+    }
 }
 
 // TODO: implement this test

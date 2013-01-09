@@ -50,3 +50,11 @@ func TestRandomRune(t *testing.T) {
     }
 }
 
+// --- BENCHMARKS ---------------------------------------------------
+
+func BenchmarkDefaultRandom(b *testing.B) {
+    for i := 0; i < b.N; i++ {
+        DefaultRandom(100)
+    }
+}
+
