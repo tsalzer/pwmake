@@ -7,18 +7,19 @@ PROJECTROOT=File.dirname(__FILE__)
 #TEST_VERBOSE="-v"
 TEST_VERBOSE=""
 
-PKGS="main pwdgen pwdgen/symbol pwdgen/rand"
+TPKGS="pwdgen pwdgen/symbol pwdgen/rand"
+PKGS="main #{TPKGS}"
 
 task :default do
     run_go("build -o mpw main")
 end
 
 task :test do
-    run_go("test #{TEST_VERBOSE} #{PKGS}")
+    run_go("test #{TEST_VERBOSE} #{TPKGS}")
 end
 
 task :bench do
-    run_go("test -test.bench 'Benchmark.*' #{TEST_VERBOSE} #{PKGS}")
+    run_go("test -test.bench 'Benchmark.*' #{TEST_VERBOSE} #{TPKGS}")
 end
 
 task :doc do
