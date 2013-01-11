@@ -33,9 +33,9 @@ func PrintScreen() error {
 		}
 		return pwd
 	}
-	lines := columns.BuildScreen(8,80,24,fn)
+	lines := columns.BuildScreen(flagLength, 80, 24, fn)
 
-	for _,line := range(lines) {
+	for _, line := range (lines) {
 		fmt.Printf("%s\n", line)
 	}
 	return nil
@@ -58,7 +58,7 @@ func PrintPassword() error {
 // This will generate a password with the given specifications, and return it.
 // Any error from the password generator will be relayed here and can be printed
 // to the user.
-func GeneratePassword() (string,error) {
+func GeneratePassword() (string, error) {
 	var gen *pwdgen.PwdGen
 	var symset *symbol.MultiSet
 	var err error
@@ -76,7 +76,7 @@ func GeneratePassword() (string,error) {
 // main.
 // This is, you know, main.
 func main() {
-	if err := PrintScreen() ; err != nil {
+	if err := PrintScreen(); err != nil {
 		fmt.Printf("%s\n", err)
 		os.Exit(1)
 	}
