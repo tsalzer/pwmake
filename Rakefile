@@ -12,7 +12,7 @@ TEST_VERBOSE=""
 
 TARGET="pwmake"
 
-TPKGS="pwdgen pwdgen/symbol pwdgen/rand"
+TPKGS="pwdgen pwdgen/symbol pwdgen/rand pwdgen/columns"
 PKGS="main #{TPKGS}"
 
 desc "default task"

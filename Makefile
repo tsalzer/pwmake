@@ -3,7 +3,7 @@
 #include $(GOROOT)/src/Make.$(GOARCH)
 
 TARGET=pwmake
-TPKGS=pwdgen pwdgen/symbol pwdgen/rand
+TPKGS=pwdgen pwdgen/symbol pwdgen/rand pwdgen/columns
 PKGS=main $(TPKGS)
 GOPATH := $(shell pwd -L)
 export GOPATH

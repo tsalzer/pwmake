@@ -11,6 +11,7 @@ import (
 	"os"
 	"pwdgen"
 	"pwdgen/symbol"
+	"pwdgen/columns"
 )
 
 var flagLength int
@@ -22,7 +23,25 @@ func init() {
 	flag.Parse()
 }
 
-// print the password.
+// print a screen of passwords
+func PrintScreen() error {
+	fn := func() string {
+		var pwd string
+		var err error
+		if pwd, err = pwdgen.GeneratePassword(flagLength); err != nil {
+			panic(fmt.Sprintf("failed to generate valid password: %s", err))
+		}
+		return pwd
+	}
+	lines := columns.BuildScreen(8,80,24,fn)
+
+	for _,line := range(lines) {
+		fmt.Printf("%s\n", line)
+	}
+	return nil
+}
+
+// print ia single password.
 // This will use GeneratePassword to generate a password.
 // Any error from the password generator will be relayed here and can be printed
 // to the user.
@@ -39,7 +58,7 @@ func PrintPassword() error {
 // This will generate a password with the given specifications, and return it.
 // Any error from the password generator will be relayed here and can be printed
 // to the user.
-func _GeneratePassword() (string, error) {
+func GeneratePassword() (string,error) {
 	var gen *pwdgen.PwdGen
 	var symset *symbol.MultiSet
 	var err error
@@ -57,8 +76,13 @@ func _GeneratePassword() (string, error) {
 // main.
 // This is, you know, main.
 func main() {
-	if err := PrintPassword(); err != nil {
+	if err := PrintScreen() ; err != nil {
 		fmt.Printf("%s\n", err)
 		os.Exit(1)
 	}
+
+	// if err := PrintPassword() ; err != nil {
+	//     fmt.Printf("%s\n", err)
+	//     os.Exit(1)
+	// }
 }
