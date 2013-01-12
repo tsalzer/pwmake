@@ -19,7 +19,7 @@ type WinSize struct {
 func GetTermSize() (*WinSize, error) {
     ws := &WinSize{}
     _, _, errno := syscall.Syscall(syscall.SYS_IOCTL,
-        uintptr(os.Stdin.Fd()), uintptr(syscall.TIOCGWINSZ),
+        uintptr(os.Stdout.Fd()), uintptr(syscall.TIOCGWINSZ),
         uintptr(unsafe.Pointer(&ws)))
 
     if errno != 0 {
