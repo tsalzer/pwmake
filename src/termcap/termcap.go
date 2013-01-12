@@ -6,6 +6,7 @@ package termcap
 
 import (
 	"os"
+	"errors"
     "syscall"
     "unsafe"
 )
@@ -15,9 +16,15 @@ type WinSize struct {
     XPixel, YPixel uint16
 }
 
-func GetTermSize() (ws WinSize) {
-    syscall.Syscall(syscall.SYS_IOCTL,
+func GetTermSize() (*WinSize, error) {
+    ws := &WinSize{}
+    _, _, errno := syscall.Syscall(syscall.SYS_IOCTL,
         uintptr(os.Stdin.Fd()), uintptr(syscall.TIOCGWINSZ),
         uintptr(unsafe.Pointer(&ws)))
-    return
+
+    if errno != 0 {
+        return nil, errors.New(errno.Error())
+    }
+
+    return ws, nil
 }
