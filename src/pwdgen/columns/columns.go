@@ -1,10 +1,20 @@
 package columns
 
 // How many passwords of a given length can I display with a given screen size?
+// This comes down to two questions: How many passwords can be displayed per
+// line, and how many lines are there?
 // All bets are off if the password is longer than the screen is wide, but we
 // still try to be reasonable.
 // Regardless of the password length, we can always print at least one password.
-
+func CalcPasswordsPerScreen(pwlen int, screen winsize) int {
+    retval := 1 // we will always cram in at least one password
+    if pwlen < int(screen.ws_col) {
+        // we can fit at least one password into a line.
+        perline := CalcNumColumns(pwlen, screen)
+        retval = perline * int(screen.ws_row)
+    }
+    return retval
+}
 
 // simple calculation: How many columns fit into a row?
 // TODO: consider that the final column need no additional space

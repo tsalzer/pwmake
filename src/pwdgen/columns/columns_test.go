@@ -4,6 +4,15 @@ import (
     "testing"
 )
 
+func TestCalcPasswordsPerScreen(t *testing.T) {
+    screen := DefaultWinSize()
+    pwlen := 8
+    expected := 8 * 24
+    if num := CalcPasswordsPerScreen(pwlen, screen); num != expected {
+        t.Errorf("expected %d passwords to fit on %s, but got %d", expected, screen, num)
+    }
+}
+
 func TestCalcNumColumns(t *testing.T) {
     screensize := DefaultWinSize()
     colw := 8
