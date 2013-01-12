@@ -25,6 +25,8 @@ func init() {
 
 // print a screen of passwords
 func PrintScreen() error {
+	screensize := columns.DefaultWinSize()
+
 	fn := func() string {
 		var pwd string
 		var err error
@@ -33,7 +35,7 @@ func PrintScreen() error {
 		}
 		return pwd
 	}
-	lines := columns.BuildScreen(flagLength, 80, 24, fn)
+	lines := columns.BuildScreen(flagLength, screensize, fn)
 
 	for _, line := range (lines) {
 		fmt.Printf("%s\n", line)

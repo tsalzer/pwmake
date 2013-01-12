@@ -5,36 +5,35 @@ import (
 )
 
 func TestCalcNumColumns(t *testing.T) {
+    screensize := DefaultWinSize()
     colw := 8
-    scrnw := 80
     expected := 8
 
-    if num := CalcNumColumns(colw, scrnw); num != expected {
+    if num := CalcNumColumns(colw, screensize); num != expected {
         t.Errorf("expected %d columns, but got %d", expected, num)
     }
 }
 
 
 func TestBuildColumns(t *testing.T) {
+    screensize := DefaultWinSize()
     colw := 8
-    scrnw := 80
     fn := func() string { return "12345678" }
     expected := "12345678 12345678 12345678 12345678 12345678 12345678 12345678 12345678"
 
-    if line := BuildColumns(colw, scrnw, fn); line != expected {
+    if line := BuildColumns(colw, screensize, fn); line != expected {
         t.Errorf("expected line\n\"%s\"\nbut got\n\"%s\"", expected, line)
     }
 }
 
 func TestBuildScreen(t *testing.T) {
+    screensize := DefaultWinSize()
     colw := 8
-    scrnw := 80
-    scrnh := 24
     fn := func() string { return "12345678" }
     expected := "12345678 12345678 12345678 12345678 12345678 12345678 12345678 12345678"
 
     count := 0
-    lines := BuildScreen(colw, scrnw, scrnh, fn)
+    lines := BuildScreen(colw, screensize, fn)
 
     for _,line := range lines {
         count++
@@ -43,8 +42,8 @@ func TestBuildScreen(t *testing.T) {
         }
     }
 
-    if count != scrnh {
-        t.Errorf("expected %d lines, but got %d", scrnh, count)
+    if count != int(screensize.ws_row) {
+        t.Errorf("expected %d lines, but got %d", screensize.ws_row, count)
     }
 }
 
