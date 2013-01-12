@@ -10,7 +10,7 @@ import (
 )
 
 type WinSize struct {
-    Rows, Cols uint16
+    Row, Col uint16
     XPixel, YPixel uint16
 }
 
