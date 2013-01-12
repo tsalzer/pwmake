@@ -5,6 +5,7 @@
 package termcap
 
 import (
+	"os"
     "syscall"
     "unsafe"
 )
@@ -16,7 +17,7 @@ type WinSize struct {
 
 func GetTermSize() (ws WinSize) {
     syscall.Syscall(syscall.SYS_IOCTL,
-        uintptr(0), uintptr(syscall.TIOCGWINSZ),
+        uintptr(os.Stdin.Fd()), uintptr(syscall.TIOCGWINSZ),
         uintptr(unsafe.Pointer(&ws)))
     return
 }
