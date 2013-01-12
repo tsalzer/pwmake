@@ -8,7 +8,7 @@ package columns
 // Regardless of the password length, we can always print at least one password.
 func CalcPasswordsPerScreen(pwlen int, screen winsize) int {
     retval := 1 // we will always cram in at least one password
-    if pwlen < int(screen.ws_col) {
+    if pwlen <= int(screen.ws_col) {
         // we can fit at least one password into a line.
         perline := CalcNumColumns(pwlen, screen)
         retval = perline * int(screen.ws_row)
@@ -18,10 +18,15 @@ func CalcPasswordsPerScreen(pwlen int, screen winsize) int {
 
 // simple calculation: How many columns fit into a row?
 // TODO: consider that the final column need no additional space
-func CalcNumColumns(colw int, ssize winsize) int {
-    combined := colw + 1    // 1 space between the columns
-    num := int(ssize.ws_col) / combined
-    return num
+func CalcNumColumns(pwlen int, ssize winsize) int {
+    screencols := int(ssize.ws_col)
+    cols  := screencols / (pwlen + 1)
+    spare := screencols % (pwlen + 1)
+    //gaps  := cols - 1
+    if spare >= pwlen {
+        return cols + 1
+    }
+    return cols
 }
 
 // build a line of columns using the given generator function.
