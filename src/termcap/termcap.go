@@ -9,10 +9,6 @@ import (
     "unsafe"
 )
 
-const (
-    tiocgwinsz = 0x5413
-)
-
 type WinSize struct {
     Rows, Cols uint16
     XPixel, YPixel uint16
@@ -20,7 +16,7 @@ type WinSize struct {
 
 func GetTermSize() (ws WinSize) {
     syscall.Syscall(syscall.SYS_IOCTL,
-        uintptr(0), uintptr(tiocgwinsz),
+        uintptr(0), uintptr(syscall.TIOCGWINSZ),
         uintptr(unsafe.Pointer(&ws)))
     return
 }
