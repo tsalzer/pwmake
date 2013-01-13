@@ -12,7 +12,12 @@ func (ws winsize) CalcPasswordsPerScreen(pwlen int) int {
         // we can fit at least one password into a line.
         perline := ws.CalcNumColumns(pwlen)
         retval = perline * int(ws.ws_row)
-    }
+    } else {
+        // a single password will use at least the whole line:
+        if chunks := int(ws.ws_row) / ws.CalcLinesPerPassword(pwlen) ; chunks > 0 {
+            return chunks
+        }
+	}
     return retval
 }
 
