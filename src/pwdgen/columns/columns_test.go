@@ -11,7 +11,7 @@ func TestCalcPasswordsPerScreen(t *testing.T) {
     }
 
     tester := func(pwlen int, expected int) {
-        if num := CalcPasswordsPerScreen(pwlen, screen); num != expected {
+        if num := screen.CalcPasswordsPerScreen(pwlen); num != expected {
             t.Errorf("expected %d passwords of %d characters to fit on %s, but got %d",
                 expected, pwlen, screen, num)
         }
@@ -42,7 +42,7 @@ func TestCalcNumColumns(t *testing.T) {
     }
 
     tester := func(pwlen, expected int) {
-        if num := CalcNumColumns(pwlen, screen); num != expected {
+        if num := screen.CalcNumColumns(pwlen); num != expected {
             t.Errorf("expected %d columns of %d chars to fit in %d, but got %d",
                 expected, pwlen, screen.ws_col, num)
         }
@@ -73,7 +73,7 @@ func TestCalcLinesPerPassword(t *testing.T) {
     }
 
     tester := func(pwlen, expected int) {
-        if num := CalcLinesPerPassword(pwlen, screen); num != expected {
+        if num := screen.CalcLinesPerPassword(pwlen); num != expected {
             t.Errorf("expected %d rows for password of %d chars on %s but got %d",
                 expected, pwlen, screen, num)
         }
@@ -97,7 +97,7 @@ func TestBuildColumns(t *testing.T) {
     fn := func() string { return "12345678" }
     expected := "12345678 12345678 12345678 12345678 12345678 12345678 12345678 12345678 12345678"
 
-    if line := BuildColumns(pwlen, screen, fn); line != expected {
+    if line := screen.BuildColumns(pwlen, fn); line != expected {
         t.Errorf("expected line\n\"%s\"\nbut got\n\"%s\"", expected, line)
     }
 }
@@ -113,7 +113,7 @@ func TestBuildScreen(t *testing.T) {
     expected := "12345678 12345678 12345678 12345678 12345678 12345678 12345678 12345678 12345678"
 
     count := 0
-    lines := BuildScreen(pwlen, screen, fn)
+    lines := screen.BuildScreen(pwlen, fn)
 
     for _,line := range lines {
         count++

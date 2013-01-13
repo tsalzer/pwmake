@@ -6,12 +6,12 @@ package columns
 // All bets are off if the password is longer than the screen is wide, but we
 // still try to be reasonable.
 // Regardless of the password length, we can always print at least one password.
-func CalcPasswordsPerScreen(pwlen int, screen winsize) int {
+func (ws winsize) CalcPasswordsPerScreen(pwlen int) int {
     retval := 1 // we will always cram in at least one password
-    if pwlen <= int(screen.ws_col) {
+    if pwlen <= int(ws.ws_col) {
         // we can fit at least one password into a line.
-        perline := CalcNumColumns(pwlen, screen)
-        retval = perline * int(screen.ws_row)
+        perline := ws.CalcNumColumns(pwlen)
+        retval = perline * int(ws.ws_row)
     }
     return retval
 }
@@ -19,8 +19,8 @@ func CalcPasswordsPerScreen(pwlen int, screen winsize) int {
 // How many passwords fit completely into a single line, considering 1 space between
 // two passwords?
 // If the password is longer than the linne, this will return 0.
-func CalcNumColumns(pwlen int, ssize winsize) int {
-    screencols := int(ssize.ws_col)
+func (ws winsize) CalcNumColumns(pwlen int) int {
+    screencols := int(ws.ws_col)
     cols  := screencols / (pwlen + 1)
     spare := screencols % (pwlen + 1)
     //gaps  := cols - 1
@@ -32,8 +32,8 @@ func CalcNumColumns(pwlen int, ssize winsize) int {
 // How many lines will this password take on this screen?
 // In almost all cases (screen cols <= password length) this is 1, otherwise
 // the number of rows.
-func CalcLinesPerPassword(pwlen int, ssize winsize) int {
-    screencols := int(ssize.ws_col)
+func (ws winsize) CalcLinesPerPassword(pwlen int) int {
+    screencols := int(ws.ws_col)
     if pwlen <= screencols {
         return 1
     }
@@ -46,9 +46,9 @@ func CalcLinesPerPassword(pwlen int, ssize winsize) int {
 
 
 // build a line of columns using the given generator function.
-func BuildColumns(colw int, ssize winsize, fn func() string) string {
+func (ws winsize) BuildColumns(colw int, fn func() string) string {
     retval := ""
-    num := CalcNumColumns(colw, ssize)
+    num := ws.CalcNumColumns(colw)
     lastcol := num - 1
     for i := 0; i < num; i++ {
         retval += fn()
@@ -60,10 +60,10 @@ func BuildColumns(colw int, ssize winsize, fn func() string) string {
 }
 
 // build a number of lines.
-func BuildScreen(colw int, ssize winsize, fn func() string) []string {
-    retval := make([]string, ssize.ws_row)
-    for i := 0; i < int(ssize.ws_row); i++ {
-        retval[i] = BuildColumns(colw, ssize, fn)
+func (ws winsize) BuildScreen(colw int, fn func() string) []string {
+    retval := make([]string, ws.ws_row)
+    for i := 0; i < int(ws.ws_row); i++ {
+        retval[i] = ws.BuildColumns(colw, fn)
     }
     return retval
 }
