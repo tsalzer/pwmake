@@ -16,8 +16,9 @@ func CalcPasswordsPerScreen(pwlen int, screen winsize) int {
     return retval
 }
 
-// simple calculation: How many columns fit into a row?
-// TODO: consider that the final column need no additional space
+// How many passwords fit completely into a single line, considering 1 space between
+// two passwords?
+// If the password is longer than the linne, this will return 0.
 func CalcNumColumns(pwlen int, ssize winsize) int {
     screencols := int(ssize.ws_col)
     cols  := screencols / (pwlen + 1)
@@ -28,6 +29,21 @@ func CalcNumColumns(pwlen int, ssize winsize) int {
     }
     return cols
 }
+// How many lines will this password take on this screen?
+// In almost all cases (screen cols <= password length) this is 1, otherwise
+// the number of rows.
+func CalcLinesPerPassword(pwlen int, ssize winsize) int {
+    screencols := int(ssize.ws_col)
+    if pwlen <= screencols {
+        return 1
+    }
+    rows := pwlen / screencols
+    if mod := pwlen % screencols; mod > 0 {
+        return rows + 1
+    }
+    return rows
+}
+
 
 // build a line of columns using the given generator function.
 func BuildColumns(colw int, ssize winsize, fn func() string) string {

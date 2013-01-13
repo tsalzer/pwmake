@@ -53,7 +53,7 @@ func TestCalcNumColumns(t *testing.T) {
     tester(10,  7)
     tester(70,  1)
     tester(80,  1)
-    tester(90,  1)
+    tester(90,  0)
 
     screen.ws_col = 10
     tester(2, 3)
@@ -66,6 +66,26 @@ func TestCalcNumColumns(t *testing.T) {
     tester(5, 2)
 }
 
+func TestCalcLinesPerPassword(t *testing.T) {
+    screen := DefaultWinSize()
+    if screen.String() != "[24, 80]" {
+        t.Fatalf("expected screen size to be [24, 80], but got %s", screen)
+    }
+
+    tester := func(pwlen, expected int) {
+        if num := CalcLinesPerPassword(pwlen, screen); num != expected {
+            t.Errorf("expected %d rows for password of %d chars on %s but got %d",
+                expected, pwlen, screen, num)
+        }
+    }
+
+    tester( 6, 1)
+    tester( 8, 1)
+    tester(10, 1)
+    tester(70, 1)
+    tester(80, 1)
+    tester(90, 2)
+}
 
 func TestBuildColumns(t *testing.T) {
     screen := DefaultWinSize()
