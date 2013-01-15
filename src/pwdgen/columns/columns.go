@@ -1,5 +1,34 @@
 package columns
 
+import (
+    "fmt"
+)
+
+// Print generated passwords to this screen.
+func (ws winsize) PrintPasswords(pwlen int, fn func() (string, error)) error {
+    num := ws.CalcPasswordsPerScreen(pwlen)
+    cols := ws.CalcNumColumns(pwlen)
+    col := 0
+
+    var pwd string
+    var err error
+
+    for i := 0; i < num ; i++ {
+        if pwd, err = fn(); err == nil {
+            if col + 1 < cols {
+                fmt.Printf("%s ", pwd)
+                col++
+            } else {
+                fmt.Printf("%s\n", pwd)
+                col = 0
+            }
+        } else {
+            return err
+        }
+    }
+    return nil
+}
+
 // How many passwords of a given length can I display with a given screen size?
 // This comes down to two questions: How many passwords can be displayed per
 // line, and how many lines are there?

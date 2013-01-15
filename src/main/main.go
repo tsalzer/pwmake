@@ -25,22 +25,24 @@ func init() {
 
 // print a screen of passwords
 func PrintScreen() error {
+	pwlen := flagLength
 	screen := columns.DefaultWinSize()
 
-	fn := func() string {
+	fn := func() (string, error) {
 		var pwd string
 		var err error
-		if pwd, err = pwdgen.GeneratePassword(flagLength); err != nil {
-			panic(fmt.Sprintf("failed to generate valid password: %s", err))
+		if pwd, err = pwdgen.GeneratePassword(pwlen); err != nil {
+			return pwd, err
 		}
-		return pwd
+		return pwd, nil
 	}
-	lines := screen.BuildScreen(flagLength, fn)
+	return screen.PrintPasswords(pwlen, fn)
+	// lines := screen.BuildScreen(flagLength, fn)
 
-	for _, line := range (lines) {
-		fmt.Printf("%s\n", line)
-	}
-	return nil
+	// for _,line := range(lines) {
+	//     fmt.Printf("%s\n", line)
+	// }
+	// return nil
 }
 
 // print ia single password.
@@ -79,7 +81,7 @@ func GeneratePassword() (string, error) {
 // This is, you know, main.
 func main() {
 	if err := PrintScreen(); err != nil {
-		fmt.Printf("%s\n", err)
+		fmt.Printf("Problem generating password: %s\n", err)
 		os.Exit(1)
 	}
 
