@@ -14,12 +14,16 @@ import (
 	"pwdgen/columns"
 )
 
+// password length
 var flagLength int
 var flagShowCharsets bool
 
+// default password length
+const defaultPwLength = 8
+
 // command line parser
 func init() {
-	flag.IntVar(&flagLength, "l", 10, "length of the password to generate")
+	flag.IntVar(&flagLength, "l", defaultPwLength, "length of the password to generate")
 	flag.Parse()
 }
 
@@ -37,25 +41,6 @@ func PrintScreen() error {
 		return pwd, nil
 	}
 	return screen.PrintPasswords(pwlen, fn)
-	// lines := screen.BuildScreen(flagLength, fn)
-
-	// for _,line := range(lines) {
-	//     fmt.Printf("%s\n", line)
-	// }
-	// return nil
-}
-
-// print ia single password.
-// This will use GeneratePassword to generate a password.
-// Any error from the password generator will be relayed here and can be printed
-// to the user.
-func PrintPassword() error {
-	if pwd, err := pwdgen.GeneratePassword(flagLength); err != nil {
-		return err
-	} else {
-		fmt.Printf("%s\n", pwd)
-	}
-	return nil
 }
 
 // generate the password,
@@ -84,9 +69,4 @@ func main() {
 		fmt.Printf("Problem generating password: %s\n", err)
 		os.Exit(1)
 	}
-
-	// if err := PrintPassword() ; err != nil {
-	//     fmt.Printf("%s\n", err)
-	//     os.Exit(1)
-	// }
 }

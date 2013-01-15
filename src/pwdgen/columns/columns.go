@@ -78,27 +78,3 @@ func (ws winsize) CalcLinesPerPassword(pwlen int) int {
     return rows
 }
 
-
-// build a line of columns using the given generator function.
-func (ws winsize) BuildColumns(colw int, fn func() string) string {
-    retval := ""
-    num := ws.CalcNumColumns(colw)
-    lastcol := num - 1
-    for i := 0; i < num; i++ {
-        retval += fn()
-        if i < lastcol {
-            retval += " "
-        }
-    }
-    return retval
-}
-
-// build a number of lines.
-func (ws winsize) BuildScreen(colw int, fn func() string) []string {
-    retval := make([]string, ws.ws_row)
-    for i := 0; i < int(ws.ws_row); i++ {
-        retval[i] = ws.BuildColumns(colw, fn)
-    }
-    return retval
-}
-
