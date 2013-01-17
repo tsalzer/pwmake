@@ -4,6 +4,30 @@ import (
     "testing"
 )
 
+func TestSendPasswordToFunc(t *testing.T) {
+    screen := DefaultWinSize()
+    if screen.String() != "[24, 80]" {
+        t.Fatalf("expected screen size to be [24, 80], but got %s", screen)
+    }
+
+    tester := func(num int, pwlen int, expected []string) {
+        // result := []string{}
+        // if err := screen.sendPasswordToFunc(num, pwlen,
+        //     func(){ return "12345678" },
+        //     func(pwd string){ result.Append(pwd) }); err != nil {
+        //     t.Errorf("sendPasswordToFunc returned error: %s", err)
+        // } else {
+        //     if result.Compare(expected) {
+        //         t.Errorf("got an unexpected password output: %s\nexpected: %s",
+        //             result, expected)
+        //     }
+        // }
+    }
+
+    tester(1, 8, []string{"12345678\n"})
+    tester(2, 8, []string{"12345678 ", "12345678\n"})
+}
+
 func TestCalcPasswordsPerScreen(t *testing.T) {
     screen := DefaultWinSize()
     if screen.String() != "[24, 80]" {

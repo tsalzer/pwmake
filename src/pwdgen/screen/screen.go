@@ -4,6 +4,19 @@ import (
     "fmt"
 )
 
+func (ws winsize) sendPasswordToFunc(num int, pwlen int,
+        fnGenPwd func() (string, error), fnPrint func(string)) error {
+    return nil
+}
+
+// print num passwords to the screen, formatted in columns.
+func (ws winsize) PrintPasswordsToScreen(num int, pwlen int, fn func() (string, error)) error {
+    fnPrint := func(str string) {
+        fmt.Printf(str)
+    }
+    return ws.sendPasswordToFunc(num, pwlen, fn, fnPrint)
+}
+
 // Print generated passwords to this screen.
 func (ws winsize) PrintPasswords(pwlen int, fn func() (string, error)) error {
     num := ws.CalcPasswordsPerScreen(pwlen)
