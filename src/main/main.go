@@ -11,7 +11,7 @@ import (
 	"os"
 	"pwdgen"
 	"pwdgen/symbol"
-	"pwdgen/columns"
+	"pwdgen/screen"
 )
 
 // password length
@@ -30,7 +30,7 @@ func init() {
 // print a screen of passwords
 func PrintScreen() error {
 	pwlen := flagLength
-	screen := columns.DefaultWinSize()
+	screen := screen.DefaultWinSize()
 
 	fn := func() (string, error) {
 		var pwd string

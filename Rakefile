@@ -10,9 +10,7 @@ DST_BIN="#{PREFIX}/bin"
 #TEST_VERBOSE="-v"
 TEST_VERBOSE=""
 
-TARGET="pwmake"
-
-TPKGS="pwdgen pwdgen/symbol pwdgen/rand pwdgen/columns"
+TPKGS="pwdgen pwdgen/symbol pwdgen/rand pwdgen/screen"
 PKGS="main #{TPKGS}"
 
 desc "default task"
