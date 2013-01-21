@@ -11,17 +11,21 @@ func TestSendPasswordToFunc(t *testing.T) {
     }
 
     tester := func(num int, pwlen int, expected []string) {
-        // result := []string{}
-        // if err := screen.sendPasswordToFunc(num, pwlen,
-        //     func(){ return "12345678" },
-        //     func(pwd string){ result.Append(pwd) }); err != nil {
-        //     t.Errorf("sendPasswordToFunc returned error: %s", err)
-        // } else {
-        //     if result.Compare(expected) {
-        //         t.Errorf("got an unexpected password output: %s\nexpected: %s",
-        //             result, expected)
-        //     }
-        // }
+        result := []string{}
+        if err := screen.sendPasswordToFunc(num, pwlen,
+            func() (string,error) { return "12345678",nil },
+            func(pwd string){ result = append(result, pwd) }); err != nil {
+            t.Errorf("sendPasswordToFunc returned error: %s", err)
+        } else {
+            if len(result) != len(expected) {
+                t.Errorf("got %d passwords but expected %d", len(result), len(expected))
+            }
+            for idx,pwd := range(result) {
+                if exppwd := expected[idx] ; pwd != exppwd {
+                    t.Errorf("at %d of %d: got \"%s\", but expected \"%s\"", idx, num, pwd, exppwd)
+                }
+            }
+        }
     }
 
     tester(1, 8, []string{"12345678\n"})

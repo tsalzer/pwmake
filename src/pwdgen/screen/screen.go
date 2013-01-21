@@ -4,8 +4,26 @@ import (
     "fmt"
 )
 
+// send a password to a given function.
+// We use this to test the PrintPasswordsToScreen method.
 func (ws winsize) sendPasswordToFunc(num int, pwlen int,
         fnGenPwd func() (string, error), fnPrint func(string)) error {
+    col := 0
+    for count := 0; count < num; count ++ {
+        if pwd,err := fnGenPwd(); err != nil {
+            // an error, return immediately
+            return err
+        } else {
+            // not an error
+            if (count + 1 == num) || (col + pwlen + 1 >= int(ws.ws_col)) {
+                col = 0
+                fnPrint(fmt.Sprintf("%s\n", pwd))
+            } else {
+                col += pwlen + 1
+                fnPrint(fmt.Sprintf("%s ", pwd))
+            }
+        }
+    }
     return nil
 }
 
