@@ -2,6 +2,7 @@ package screen
 
 import (
     "testing"
+    "fmt"
 )
 
 func TestSendPasswordToFunc(t *testing.T) {
@@ -10,26 +11,66 @@ func TestSendPasswordToFunc(t *testing.T) {
         t.Fatalf("expected screen size to be [24, 80], but got %s", screen)
     }
 
+    tcase := ""
+    fnPwd := func() (string,error) { return "12345678",nil }
+
     tester := func(num int, pwlen int, expected []string) {
-        result := []string{}
-        if err := screen.sendPasswordToFunc(num, pwlen,
-            func() (string,error) { return "12345678",nil },
-            func(pwd string){ result = append(result, pwd) }); err != nil {
+        count := 0
+        explen := len(expected)
+
+        fnCb := func(pwd string) error {
+            // check we're not exceeding the number of expected calls
+            count++
+            if count > explen {
+                return fmt.Errorf("%s: expected %s passwords, but got %s as number %d",
+                    tcase, explen, pwd, count)
+            }
+
+            // check if the string looks as expected
+            exppwd := expected[count - 1]
+            if pwd != exppwd {
+                return fmt.Errorf("%s: at %d of %d in %s: got \"%s\" but expected \"%s\"",
+                    tcase, count, num, screen, pwd, exppwd)
+            }
+            // all is well
+            return nil
+        }
+
+        if err := screen.sendPasswordToFunc(num, pwlen, fnPwd , fnCb); err != nil {
             t.Errorf("sendPasswordToFunc returned error: %s", err)
         } else {
-            if len(result) != len(expected) {
-                t.Errorf("got %d passwords but expected %d", len(result), len(expected))
-            }
-            for idx,pwd := range(result) {
-                if exppwd := expected[idx] ; pwd != exppwd {
-                    t.Errorf("at %d of %d: got \"%s\", but expected \"%s\"", idx, num, pwd, exppwd)
-                }
+            if count != explen {
+                t.Errorf("got %d passwords but expected %d", count, explen)
             }
         }
     }
 
+    // regular 80x24
+    tcase = "regular 80x24 screen"
     tester(1, 8, []string{"12345678\n"})
     tester(2, 8, []string{"12345678 ", "12345678\n"})
+
+    // 16 cols, only room for one password:
+    // 8(pw) + 1(space) + 8(pw) = 17
+    tcase = "16col screen, single pwd only"
+    screen.ws_col = 16
+    tester(2, 8, []string{"12345678\n", "12345678\n"})
+    tester(3, 8, []string{"12345678\n", "12345678\n", "12345678\n"})
+    tester(4, 8, []string{"12345678\n", "12345678\n", "12345678\n", "12345678\n"})
+
+    // 17 cols, room for exactly 2 passwords
+    tcase = "17col screen, two pwds plus one space"
+    screen.ws_col = 17
+    tester(2, 8, []string{"12345678 ", "12345678\n"})
+    tester(3, 8, []string{"12345678 ", "12345678\n", "12345678\n"})
+    tester(4, 8, []string{"12345678 ", "12345678\n", "12345678 ", "12345678\n"})
+
+    // 18 cols, plenty of room for 2 passwords
+    tcase = "18col screen, two pwds plus two spaces"
+    screen.ws_col = 18
+    tester(2, 8, []string{"12345678 ", "12345678\n"})
+    tester(3, 8, []string{"12345678 ", "12345678\n", "12345678\n"})
+    tester(4, 8, []string{"12345678 ", "12345678\n", "12345678 ", "12345678\n"})
 }
 
 func TestCalcPasswordsPerScreen(t *testing.T) {

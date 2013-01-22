@@ -7,20 +7,32 @@ import (
 // send a password to a given function.
 // We use this to test the PrintPasswordsToScreen method.
 func (ws winsize) sendPasswordToFunc(num int, pwlen int,
-        fnGenPwd func() (string, error), fnPrint func(string)) error {
+        fnGenPwd func() (string, error),
+        fnPrint  func(string) error) error {
     col := 0
+
     for count := 0; count < num; count ++ {
         if pwd,err := fnGenPwd(); err != nil {
             // an error, return immediately
             return err
         } else {
             // not an error
-            if (count + 1 == num) || (col + pwlen + 1 >= int(ws.ws_col)) {
+            col += pwlen + 1
+            dcol := col
+            // fmt.Printf("col=%d", col)
+            result := ""
+            if (count + 1 == num) || (col + pwlen > int(ws.ws_col)) {
                 col = 0
-                fnPrint(fmt.Sprintf("%s\n", pwd))
+                // fmt.Printf(" reset\n")
+                result = fmt.Sprintf("%s\n", pwd)
             } else {
-                col += pwlen + 1
-                fnPrint(fmt.Sprintf("%s ", pwd))
+                // fmt.Printf(" ")
+                result = fmt.Sprintf("%s ", pwd)
+            }
+
+            if err := fnPrint(result); err != nil {
+                return fmt.Errorf("count=%d, num=%d, col=%d, col+pwlen=%d, ws_col=%d - %s",
+                    count, num, dcol, dcol + pwlen, ws.ws_col, err)
             }
         }
     }
@@ -29,8 +41,9 @@ func (ws winsize) sendPasswordToFunc(num int, pwlen int,
 
 // print num passwords to the screen, formatted in columns.
 func (ws winsize) PrintPasswordsToScreen(num int, pwlen int, fn func() (string, error)) error {
-    fnPrint := func(str string) {
+    fnPrint := func(str string) error {
         fmt.Printf(str)
+        return nil
     }
     return ws.sendPasswordToFunc(num, pwlen, fn, fnPrint)
 }
