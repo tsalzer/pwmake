@@ -4,24 +4,37 @@ import (
     "fmt"
 )
 
+
+// simply print a string.
+// we need this in different places, here.
+func simplePrint(str string) error {
+    fmt.Printf(str)
+    return nil
+}
+
 // send a password to a given function.
 // We use this to test the PrintPasswordsToScreen method.
 func (ws winsize) sendPasswordToFunc(num int, pwlen int,
         fnGenPwd func() (string, error),
         fnPrint  func(string) error) error {
+    var err error
+    var dcol int
+    var pwd string
+    var result string
+
     col := 0
+    wscol := int(ws.ws_col)
 
     for count := 0; count < num; count ++ {
-        if pwd,err := fnGenPwd(); err != nil {
+        if pwd,err = fnGenPwd(); err != nil {
             // an error, return immediately
             return err
         } else {
             // not an error
             col += pwlen + 1
-            dcol := col
+            dcol = col
             // fmt.Printf("col=%d", col)
-            result := ""
-            if (count + 1 == num) || (col + pwlen > int(ws.ws_col)) {
+            if (count + 1 == num) || (col + pwlen > wscol) {
                 col = 0
                 // fmt.Printf(" reset\n")
                 result = fmt.Sprintf("%s\n", pwd)
@@ -30,7 +43,7 @@ func (ws winsize) sendPasswordToFunc(num int, pwlen int,
                 result = fmt.Sprintf("%s ", pwd)
             }
 
-            if err := fnPrint(result); err != nil {
+            if err = fnPrint(result); err != nil {
                 return fmt.Errorf("count=%d, num=%d, col=%d, col+pwlen=%d, ws_col=%d - %s",
                     count, num, dcol, dcol + pwlen, ws.ws_col, err)
             }
@@ -41,11 +54,7 @@ func (ws winsize) sendPasswordToFunc(num int, pwlen int,
 
 // print num passwords to the screen, formatted in columns.
 func (ws winsize) PrintPasswordsToScreen(num int, pwlen int, fn func() (string, error)) error {
-    fnPrint := func(str string) error {
-        fmt.Printf(str)
-        return nil
-    }
-    return ws.sendPasswordToFunc(num, pwlen, fn, fnPrint)
+    return ws.sendPasswordToFunc(num, pwlen, fn, simplePrint)
 }
 
 // Print generated passwords to this screen.
@@ -81,11 +90,7 @@ func (ws winsize) sendPasswords(pwlen int,
 
 // Print generated passwords to this screen.
 func (ws winsize) PrintPasswords(pwlen int, fn func() (string, error)) error {
-    fnPrint := func(str string) error {
-        fmt.Printf(str)
-        return nil
-    }
-    return ws.sendPasswords(pwlen, fn, fnPrint)
+    return ws.sendPasswords(pwlen, fn, simplePrint)
 }
 
 // How many passwords of a given length can I display with a given screen size?
