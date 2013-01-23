@@ -49,28 +49,43 @@ func (ws winsize) PrintPasswordsToScreen(num int, pwlen int, fn func() (string, 
 }
 
 // Print generated passwords to this screen.
-func (ws winsize) PrintPasswords(pwlen int, fn func() (string, error)) error {
+func (ws winsize) sendPasswords(pwlen int,
+        fnGenPw func() (string, error),
+        fnPrintPw func(string) error) error {
     num := ws.CalcPasswordsPerScreen(pwlen)
     cols := ws.CalcNumColumns(pwlen)
     col := 0
 
     var pwd string
     var err error
+    var pwprint string
 
     for i := 0; i < num ; i++ {
-        if pwd, err = fn(); err == nil {
+        if pwd, err = fnGenPw(); err == nil {
             if col + 1 < cols {
-                fmt.Printf("%s ", pwd)
+                pwprint = fmt.Sprintf("%s ", pwd)
                 col++
             } else {
-                fmt.Printf("%s\n", pwd)
+                pwprint = fmt.Sprintf("%s\n", pwd)
                 col = 0
+            }
+            if err = fnPrintPw(pwprint); err != nil {
+                return err
             }
         } else {
             return err
         }
     }
     return nil
+}
+
+// Print generated passwords to this screen.
+func (ws winsize) PrintPasswords(pwlen int, fn func() (string, error)) error {
+    fnPrint := func(str string) error {
+        fmt.Printf(str)
+        return nil
+    }
+    return ws.sendPasswords(pwlen, fn, fnPrint)
 }
 
 // How many passwords of a given length can I display with a given screen size?

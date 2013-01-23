@@ -179,3 +179,22 @@ func BenchmarkSendPasswordToFunc(b *testing.B) {
     }
 }
 
+func BenchmarkSendPasswords(b *testing.B) {
+    b.StopTimer()
+    screen := DefaultWinSize()
+    if screen.String() != "[24, 80]" {
+        b.Fatalf("expected screen size to be [24, 80], but got %s", screen)
+    }
+
+    const pwlen = 8
+
+    fnPwd := func() (string,error) { return "12345678",nil }
+    fnCb := func(pwd string) error { return nil }
+
+    b.StartTimer()
+
+    for i := 0; i < b.N; i++ {
+       screen.sendPasswords(pwlen, fnPwd, fnCb)
+    }
+}
+
