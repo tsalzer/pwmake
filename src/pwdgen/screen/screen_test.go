@@ -36,8 +36,8 @@ func TestSendPasswordToFunc(t *testing.T) {
             return nil
         }
 
-        if err := screen.sendPasswordToFunc(num, pwlen, fnPwd , fnCb); err != nil {
-            t.Errorf("sendPasswordToFunc returned error: %s", err)
+        if err := screen.sendPasswordsToFunc(num, pwlen, fnPwd , fnCb); err != nil {
+            t.Errorf("sendPasswordsToFunc returned error: %s", err)
         } else {
             if count != explen {
                 t.Errorf("got %d passwords but expected %d", count, explen)
@@ -158,7 +158,7 @@ func TestCalcLinesPerPassword(t *testing.T) {
 
 // --- BENCHMARKS ---------------------------------------------------
 
-func BenchmarkSendPasswordToFunc(b *testing.B) {
+func BenchmarkSendPasswordsToFunc(b *testing.B) {
     b.StopTimer()
     screen := DefaultWinSize()
     if screen.String() != "[24, 80]" {
@@ -175,11 +175,11 @@ func BenchmarkSendPasswordToFunc(b *testing.B) {
     b.StartTimer()
 
     for i := 0; i < b.N; i++ {
-       screen.sendPasswordToFunc(num, pwlen, fnPwd, fnCb)
+       screen.sendPasswordsToFunc(num, pwlen, fnPwd, fnCb)
     }
 }
 
-func BenchmarkSendPasswords(b *testing.B) {
+func BenchmarkSendPasswordsToGrid(b *testing.B) {
     b.StopTimer()
     screen := DefaultWinSize()
     if screen.String() != "[24, 80]" {
@@ -194,7 +194,7 @@ func BenchmarkSendPasswords(b *testing.B) {
     b.StartTimer()
 
     for i := 0; i < b.N; i++ {
-       screen.sendPasswords(pwlen, fnPwd, fnCb)
+       screen.sendPasswordsToGrid(pwlen, fnPwd, fnCb)
     }
 }
 

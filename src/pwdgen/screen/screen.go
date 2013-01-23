@@ -14,7 +14,7 @@ func simplePrint(str string) error {
 
 // send a password to a given function.
 // We use this to test the PrintPasswordsToScreen method.
-func (ws winsize) sendPasswordToFunc(num int, pwlen int,
+func (ws winsize) sendPasswordsToFunc(num int, pwlen int,
         fnGenPwd func() (string, error),
         fnPrint  func(string) error) error {
     var err error
@@ -52,13 +52,8 @@ func (ws winsize) sendPasswordToFunc(num int, pwlen int,
     return nil
 }
 
-// print num passwords to the screen, formatted in columns.
-func (ws winsize) PrintPasswordsToScreen(num int, pwlen int, fn func() (string, error)) error {
-    return ws.sendPasswordToFunc(num, pwlen, fn, simplePrint)
-}
-
 // Print generated passwords to this screen.
-func (ws winsize) sendPasswords(pwlen int,
+func (ws winsize) sendPasswordsToGrid(pwlen int,
         fnGenPw func() (string, error),
         fnPrintPw func(string) error) error {
     num := ws.CalcPasswordsPerScreen(pwlen)
@@ -90,7 +85,7 @@ func (ws winsize) sendPasswords(pwlen int,
 
 // Print generated passwords to this screen.
 func (ws winsize) PrintPasswords(pwlen int, fn func() (string, error)) error {
-    return ws.sendPasswords(pwlen, fn, simplePrint)
+    return ws.sendPasswordsToFunc(ws.CalcPasswordsPerScreen(pwlen), pwlen, fn, simplePrint)
 }
 
 // How many passwords of a given length can I display with a given screen size?
