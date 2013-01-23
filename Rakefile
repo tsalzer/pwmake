@@ -10,7 +10,7 @@ DST_BIN="#{PREFIX}/bin"
 #TEST_VERBOSE="-v"
 TEST_VERBOSE=""
 
-TPKGS="pwdgen pwdgen/symbol pwdgen/rand pwdgen/screen"
+TPKGS="pwdgen pwdgen/cli pwdgen/symbol pwdgen/rand pwdgen/screen"
 PKGS="main #{TPKGS}"
 
 desc "default task"

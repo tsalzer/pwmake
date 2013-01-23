@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"os"
 	"pwdgen"
+	"pwdgen/cli"
 	"pwdgen/symbol"
 	"pwdgen/screen"
 )
@@ -18,12 +19,9 @@ import (
 var flagLength int
 var flagShowCharsets bool
 
-// default password length
-const defaultPwLength = 8
-
 // command line parser
 func init() {
-	flag.IntVar(&flagLength, "l", defaultPwLength, "length of the password to generate")
+	flag.IntVar(&flagLength, "l", cli.DefaultPwLength, "length of the password to generate")
 	flag.Parse()
 }
 
