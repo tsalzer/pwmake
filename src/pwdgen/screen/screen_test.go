@@ -156,3 +156,26 @@ func TestCalcLinesPerPassword(t *testing.T) {
     tester(90, 2)
 }
 
+// --- BENCHMARKS ---------------------------------------------------
+
+func BenchmarkSendPasswordToFunc(b *testing.B) {
+    b.StopTimer()
+    screen := DefaultWinSize()
+    if screen.String() != "[24, 80]" {
+        b.Fatalf("expected screen size to be [24, 80], but got %s", screen)
+    }
+
+    const pwlen = 8
+
+    num := screen.CalcPasswordsPerScreen(pwlen)
+
+    fnPwd := func() (string,error) { return "12345678",nil }
+    fnCb := func(pwd string) error { return nil }
+
+    b.StartTimer()
+
+    for i := 0; i < b.N; i++ {
+       screen.sendPasswordToFunc(num, pwlen, fnPwd, fnCb)
+    }
+}
+
