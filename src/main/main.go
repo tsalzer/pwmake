@@ -6,7 +6,6 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"os"
 	"pwdgen"
@@ -15,19 +14,16 @@ import (
 	"pwdgen/screen"
 )
 
-// password length
-var flagLength int
-var flagShowCharsets bool
+var cmdline cli.Cli
 
 // command line parser
 func init() {
-	flag.IntVar(&flagLength, "l", cli.DefaultPwLength, "length of the password to generate")
-	flag.Parse()
+	cmdline = cli.NewCli()
 }
 
 // print a screen of passwords
 func PrintScreen() error {
-	pwlen := flagLength
+	pwlen := cmdline.PwLength
 	screen := screen.DefaultWinSize()
 
 	fn := func() (string, error) {
@@ -54,7 +50,7 @@ func GeneratePassword() (string, error) {
 		return "", err
 	}
 
-	if gen, err = pwdgen.NewPwdGen(symset, flagLength); err != nil {
+	if gen, err = pwdgen.NewPwdGen(symset, cmdline.PwLength); err != nil {
 		return "", err
 	}
 	return gen.String(), nil
@@ -63,8 +59,12 @@ func GeneratePassword() (string, error) {
 // main.
 // This is, you know, main.
 func main() {
-	if err := PrintScreen(); err != nil {
-		fmt.Printf("Problem generating password: %s\n", err)
-		os.Exit(1)
+	if err := cmdline.Parse(); err != nil {
+		fmt.Printf("argument error: %s\n", err)
+	} else {
+		if err := PrintScreen(); err != nil {
+			fmt.Printf("Problem generating password: %s\n", err)
+			os.Exit(1)
+		}
 	}
 }
