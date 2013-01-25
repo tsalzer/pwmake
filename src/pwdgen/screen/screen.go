@@ -88,6 +88,12 @@ func (ws winsize) PrintPasswords(pwlen int, fn func() (string, error)) error {
     return ws.sendPasswordsToFunc(ws.CalcPasswordsPerScreen(pwlen), pwlen, fn, simplePrint)
 }
 
+// Print NUM generated passwords to this screen.
+func (ws winsize) PrintNumPasswords(num int, pwlen int, fn func() (string, error)) error {
+    return ws.sendPasswordsToFunc(num, pwlen, fn, simplePrint)
+}
+
+
 // How many passwords of a given length can I display with a given screen size?
 // This comes down to two questions: How many passwords can be displayed per
 // line, and how many lines are there?

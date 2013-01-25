@@ -21,10 +21,13 @@ func init() {
 	cmdline = cli.NewCli()
 }
 
-// print a screen of passwords
-func PrintScreen() error {
+// print a screen of num passwords
+func PrintScreen(num int) error {
 	pwlen := cmdline.PwLength
 	screen := screen.DefaultWinSize()
+	if num == 0 {
+		num = screen.CalcPasswordsPerScreen(pwlen)
+	}
 
 	fn := func() (string, error) {
 		var pwd string
@@ -34,7 +37,7 @@ func PrintScreen() error {
 		}
 		return pwd, nil
 	}
-	return screen.PrintPasswords(pwlen, fn)
+	return screen.PrintNumPasswords(num, pwlen, fn)
 }
 
 // generate the password,
@@ -62,9 +65,13 @@ func main() {
 	if err := cmdline.Parse(); err != nil {
 		fmt.Printf("argument error: %s\n", err)
 	} else {
-		if err := PrintScreen(); err != nil {
-			fmt.Printf("Problem generating password: %s\n", err)
-			os.Exit(1)
+		if cmdline.ShowHelp {
+			fmt.Printf("Yes, I assume there should be some help. Try -l NUM for password lengths.\n")
+		} else {
+			if err := PrintScreen(cmdline.PwNum); err != nil {
+				fmt.Printf("Problem generating password: %s\n", err)
+				os.Exit(1)
+			}
 		}
 	}
 }
