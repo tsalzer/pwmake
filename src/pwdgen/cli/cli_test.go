@@ -2,6 +2,7 @@ package cli
 
 import (
     "testing"
+    "reflect"
 )
 
 // ------------------------------------------------------------------
@@ -30,6 +31,23 @@ func cliLoaderSingles(t *testing.T, args []string, cb func(c Cli, a []string)) {
     for _, arg := range(args) {
         cliLoader(t, []string{arg}, cb)
     }
+}
+
+func cliCheckBool(t *testing.T, args []string, name string, expval bool) {
+    cliLoaderSingles(t, args, func(c Cli, a []string){
+        ps := reflect.ValueOf(&c)   // pointer to struct
+        s := ps.Elem()              // struct
+        field := s.FieldByName(name)
+        if field.IsValid() {
+            val := field.Bool()
+            if val != expval {
+                t.Errorf("expected %s to set %s to %s, got %s", a, name, expval, val)
+            }
+        } else {
+            t.Errorf("field %s not found, cannot test this", name)
+        }
+    })
+
 }
 
 // ------------------------------------------------------------------
@@ -64,22 +82,14 @@ func TestParseFriendly(t *testing.T) {
             t.Errorf("expected %s to set password length to 10, got %d", args, cl.PwLength)
         } })
 
+    cliCheckBool(t, []string{"-0", "--no-numerals"},   "UseNumbers",  false)
+    cliCheckBool(t, []string{"-n", "--numerals"},      "UseNumbers",  true)
+    cliCheckBool(t, []string{"-A", "--no-capitalize"}, "UseCapitals", false)
+    cliCheckBool(t, []string{"-B", "--ambigous"},      "UseAmbigous", true)
+    cliCheckBool(t, []string{"-s", "--secure"},        "Secure",      true)
+    cliCheckBool(t, []string{"-v", "--no-vowels"},     "UseNoVowels", true)
+    cliCheckBool(t, []string{"-y", "--symbols"},       "UseSpecials", true)
+    cliCheckBool(t, []string{"-h", "--help"},          "ShowHelp",    true)
 
-    cliLoaderSingles(t, []string{"-0", "--no-numerals"}, func(c Cli, a []string){
-        if c.UseNumbers != false {
-            t.Errorf("expected %s to set UseNumbers to false, got %s", a, c.UseNumbers)
-        } })
-
-    cliLoaderSingles(t, []string{"-n", "--numerals"}, func(c Cli, a []string){
-        if c.UseNumbers != true {
-            t.Errorf("expected %s to set UseNumbers to true, got %s", a, c.UseNumbers)
-        } })
-
-
-
-    cliLoaderSingles(t, []string{"-h", "--help"}, func(c Cli, a []string){
-        if c.ShowHelp != true {
-            t.Errorf("expected %s to set ShowHelp to true, got %s", a, c.ShowHelp)
-        } })
 }
 
