@@ -116,7 +116,7 @@ func (c *Cli) Parse() error {
             c.PrintOnePerLine = true
         case val == "-A" || val == "--no-capitalize":
             c.UseCapitals = false
-        case val == "--capitals":
+        case val == "--capitalize":
             c.UseCapitals = true
         case val == "-a" || val == "--alt-phonics":
             // ignore

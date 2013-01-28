@@ -82,14 +82,17 @@ func TestParseFriendly(t *testing.T) {
             t.Errorf("expected %s to set password length to 10, got %d", args, cl.PwLength)
         } })
 
-    cliCheckBool(t, []string{"-0", "--no-numerals"},   "UseNumbers",  false)
-    cliCheckBool(t, []string{"-n", "--numerals"},      "UseNumbers",  true)
-    cliCheckBool(t, []string{"-A", "--no-capitalize"}, "UseCapitals", false)
-    cliCheckBool(t, []string{"-B", "--ambigous"},      "UseAmbigous", true)
-    cliCheckBool(t, []string{"-s", "--secure"},        "Secure",      true)
-    cliCheckBool(t, []string{"-v", "--no-vowels"},     "UseNoVowels", true)
-    cliCheckBool(t, []string{"-y", "--symbols"},       "UseSpecials", true)
-    cliCheckBool(t, []string{"-h", "--help"},          "ShowHelp",    true)
+    cliCheckBool(t, []string{"-0", "--no-numerals"},   "UseNumbers",        false)
+    cliCheckBool(t, []string{"-1"},                    "PrintOnePerLine",   true)
+    cliCheckBool(t, []string{"-n", "--numerals"},      "UseNumbers",        true)
+    cliCheckBool(t, []string{      "--capitalize"},    "UseCapitals",       true)
+    cliCheckBool(t, []string{"-A", "--no-capitalize"}, "UseCapitals",       false)
+    cliCheckBool(t, []string{"-B", "--ambigous"},      "UseAmbigous",       true)
+    cliCheckBool(t, []string{"-C"},                    "PrintColumns",      true)
+    cliCheckBool(t, []string{"-s", "--secure"},        "Secure",            true)
+    cliCheckBool(t, []string{"-v", "--no-vowels"},     "UseNoVowels",       true)
+    cliCheckBool(t, []string{"-y", "--symbols"},       "UseSpecials",       true)
+    cliCheckBool(t, []string{"-h", "--help"},          "ShowHelp",          true)
 
 }
 
