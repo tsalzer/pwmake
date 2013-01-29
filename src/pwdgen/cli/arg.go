@@ -18,23 +18,6 @@ type Arg struct {
     FieldName string
 }
 
-type ArgSet struct {
-    Args []*Arg
-}
-
-
-// ------------------------------------------------------------------
-
-func NewArgSet() ArgSet {
-    var retval ArgSet
-    //retval.Args = make([]*Args)
-    return retval
-}
-
-func (s *ArgSet) Len() int {
-    return len(s.Args)
-}
-
 // ------------------------------------------------------------------
 
 func genericArg(short, long, usage, field string) Arg {
@@ -57,16 +40,6 @@ func String(short, long, usage, field string, value string) Arg {
     return retval
 }
 
-
-func (s *ArgSet) AddString(short, long, usage, field, value string ) {
-    arg := String(short, long, usage, field, value)
-    s.Args = append(s.Args, &arg)
-}
-
-func (s *ArgSet) AddBoolean(short, long, usage, field string, value bool) {
-    arg := Boolean(short, long, usage, field, value)
-    s.Args = append(s.Args, &arg)
-}
 
 // ------------------------------------------------------------------
 
