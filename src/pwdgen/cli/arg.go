@@ -2,8 +2,8 @@ package cli
 
 import (
     "strconv"
-    // "fmt"
-    // "reflect"
+    "fmt"
+    "reflect"
 )
 
 
@@ -13,11 +13,10 @@ type ArgTypes struct {
 type Arg struct {
     ShortName       string
     LongName        string
-    ValueType       string
+    ValueType       interface{}
     DefaultValue    string
     Description     string
     FieldName       string
-    RequireValue    bool
     GetValue        func(string) (interface{}, error)
 }
 
@@ -36,7 +35,8 @@ func genericArg(short, long, usage, field string) Arg {
 }
 
 // a Boolean argument.
-// Needs a default value.
+// The value defines what will be written into the field when the
+// argument matches.
 func Boolean(short, long, usage, field string, value bool) Arg {
     retval := genericArg(short, long, usage, field)
     return retval
@@ -46,7 +46,7 @@ func Boolean(short, long, usage, field string, value bool) Arg {
 // Needs a default value.
 func Int(short, long, usage, field string, value int) Arg {
     retval := genericArg(short, long, usage, field)
-    retval.RequireValue = true
+    retval.ValueType = reflect.Int
     retval.GetValue = extractInt
     return retval
 }
@@ -55,7 +55,7 @@ func Int(short, long, usage, field string, value int) Arg {
 // Needs a default value.
 func String(short, long, usage, field string, value string) Arg {
     retval := genericArg(short, long, usage, field)
-    retval.RequireValue = true
+    retval.ValueType = reflect.String
     retval.GetValue = extractString
     return retval
 }
@@ -80,7 +80,7 @@ func extractString(arg string) (interface{}, error) {
 
 // check if the given argument matches, then shift.
 // only consider the first argument.
-func (a *Arg) MatchShift(args []string) ([]string, interface{}, bool) {
+func (a *Arg) MatchShift(args []string) ([]string, interface{}, error) {
     if a.Match(args[0]) {
         shaved := args[1:]  // shave off the first string
 
@@ -88,19 +88,19 @@ func (a *Arg) MatchShift(args []string) ([]string, interface{}, bool) {
             // we expect a value
             if len(shaved) > 0 {
                 if val,err := a.GetValue(shaved[0]); err == nil {
-                    return shaved[1:], val, true
+                    return shaved[1:], val, nil
                 } else {
-                    return args, nil, false
+                    return args, nil, err
                 }
             } else {
-               return args, nil, false
+               return args, nil, fmt.Errorf("no value given for option %s", a.ShortName)
             }
         } else {
             // this is just a flag
-            return shaved, nil, true
+            return shaved, nil, nil
         }
     }
-    return args, nil, false
+    return args, nil, fmt.Errorf("option %s not recognized", args[0])
 }
 
 // check if the Arg matches the given string.
