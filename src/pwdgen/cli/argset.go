@@ -18,14 +18,34 @@ func (s *ArgSet) Len() int {
 // ------------------------------------------------------------------
 
 
-func (s *ArgSet) AddString(short, long, usage, field, value string ) {
-    arg := String(short, long, usage, field, value)
-    s.Args = append(s.Args, &arg)
+// Add a string option to the argument set.
+func (s *ArgSet) AddInt(short, long, usage, field string, value int) error {
+    if arg, err := IntArg(short, long, usage, field, value); err != nil {
+        return err
+    } else {
+        s.Args = append(s.Args, &arg)
+    }
+    return nil
 }
 
-func (s *ArgSet) AddBoolean(short, long, usage, field string, value bool) {
-    arg := Boolean(short, long, usage, field, value)
-    s.Args = append(s.Args, &arg)
+// Add a string option to the argument set.
+func (s *ArgSet) AddString(short, long, usage, field, value string) error {
+    if arg, err := StringArg(short, long, usage, field, value); err != nil {
+        return err
+    } else {
+        s.Args = append(s.Args, &arg)
+    }
+    return nil
+}
+
+// Add a boolean flag option to the argument set.
+func (s *ArgSet) AddBoolean(short, long, usage, field string, value bool) error {
+    if arg, err := BooleanArg(short, long, usage, field, value); err != nil {
+        return err
+    } else {
+        s.Args = append(s.Args, &arg)
+    }
+    return nil
 }
 
 

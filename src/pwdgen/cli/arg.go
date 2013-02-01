@@ -7,57 +7,57 @@ import (
 )
 
 
-type ArgTypes struct {
-}
-
 type Arg struct {
-    ShortName       string
-    LongName        string
-    ValueType       interface{}
-    DefaultValue    string
-    Description     string
-    FieldName       string
-    GetValue        func(string) (interface{}, error)
+    ShortName       string      // short name, may be empty
+    LongName        string      // long name, may be empty
+    ValueType       interface{} // the required value type
+    DefaultValue    interface{} // the default value (may be nil)
+    Description     string      // description, used by usage function
+    FieldName       string      // name of the field to update
+    GetValue        func(string) (interface{}, error)   // function to extract value (may be nil)
 }
 
 // ------------------------------------------------------------------
 
 // generic constructor.
 // fills in the stuff we need for every argument.
-func genericArg(short, long, usage, field string) Arg {
+func genericArg(short, long, usage, field string) (Arg, error) {
     var retval Arg
     retval.ShortName = short
     retval.LongName = long
     retval.Description = usage
     retval.FieldName = field
 
-    return retval
+    if retval.ShortName == "" && retval.LongName == "" {
+        return retval, fmt.Errorf("invalid argument: an argument must have at least one name")
+    }
+    return retval, nil
 }
 
 // a Boolean argument.
 // The value defines what will be written into the field when the
 // argument matches.
-func Boolean(short, long, usage, field string, value bool) Arg {
-    retval := genericArg(short, long, usage, field)
-    return retval
+func BooleanArg(short, long, usage, field string, value bool) (Arg, error) {
+    retval, err := genericArg(short, long, usage, field)
+    return retval, err
 }
 
 // an Int argument.
 // Needs a default value.
-func Int(short, long, usage, field string, value int) Arg {
-    retval := genericArg(short, long, usage, field)
+func IntArg(short, long, usage, field string, value int) (Arg, error) {
+    retval, err := genericArg(short, long, usage, field)
     retval.ValueType = reflect.Int
     retval.GetValue = extractInt
-    return retval
+    return retval, err
 }
 
 // a String argument.
 // Needs a default value.
-func String(short, long, usage, field string, value string) Arg {
-    retval := genericArg(short, long, usage, field)
+func StringArg(short, long, usage, field string, value string) (Arg, error) {
+    retval, err := genericArg(short, long, usage, field)
     retval.ValueType = reflect.String
     retval.GetValue = extractString
-    return retval
+    return retval, err
 }
 
 // ------------------------------------------------------------------
