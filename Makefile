@@ -1,15 +1,15 @@
-# Makefile for something
+# Makefile for pwmake
 
 #include $(GOROOT)/src/Make.$(GOARCH)
 
-TARGETS=mpw
+TARGET=pwmake
 TPKGS=pwdgen pwdgen/symbol pwdgen/rand
 PKGS=main $(TPKGS)
 GOPATH := $(shell pwd -L)
 export GOPATH
 
 all:
-	go build -o mpw main
+	go build -o $(TARGET) main
 
 test:
 	go test $(TPKGS)
@@ -18,7 +18,7 @@ bench:
 	go test -test.bench 'Benchmark.*' $(TPKGS)
 
 clean:
-	rm -f $(TARGETS)
+	rm -f $(TARGET)
 
 main:$(TARGETS)
 

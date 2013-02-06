@@ -7,11 +7,13 @@ PROJECTROOT=File.dirname(__FILE__)
 #TEST_VERBOSE="-v"
 TEST_VERBOSE=""
 
+TARGET="pwmake"
+
 TPKGS="pwdgen pwdgen/symbol pwdgen/rand"
 PKGS="main #{TPKGS}"
 
 task :default do
-    run_go("build -o mpw main")
+    run_go("build -o #{TARGET} main")
 end
 
 task :test do
@@ -32,7 +34,7 @@ task :http do
 end
 
 task :clean do
-    File.unlink("#{PROJECTROOT}/mpw")
+    File.unlink("#{PROJECTROOT}/#{TARGET}")
 end
 
 def run_line(line)
