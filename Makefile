@@ -14,6 +14,9 @@ all:
 test:
 	go test $(TPKGS)
 
+fix:
+	go fix $(TPKGS)
+
 bench:
 	go test -test.bench 'Benchmark.*' $(TPKGS)
 
