@@ -2,7 +2,7 @@
 
 #include $(GOROOT)/src/Make.$(GOARCH)
 
-TARGETS=mpw
+TARGET=pwmake
 TPKGS=pwdgen pwdgen/cli pwdgen/symbol pwdgen/rand pwdgen/screen
 PKGS=main $(TPKGS)
 GOPATH := $(shell pwd -L)
