@@ -17,6 +17,9 @@ test:
 fix:
 	go fix $(TPKGS)
 
+fmt:
+	go fmt $(TPKGS)
+
 bench:
 	go test -test.bench 'Benchmark.*' $(TPKGS)
 
@@ -29,3 +32,4 @@ main:$(TARGETS)
 % : %.go
 	go build $<
 
+.PHONY: fix fmt

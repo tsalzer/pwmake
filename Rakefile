@@ -22,6 +22,16 @@ task :build do
     run_go("build -o #{TARGET} main")
 end
 
+desc "fix source in #{TPKGS}"
+task :fix do
+    run_go("fix #{TPKGS}")
+end
+
+desc "format source in #{TPKGS}"
+task :fmt do
+    run_go("fmt #{TPKGS}")
+end
+
 desc "run all tests in #{TPKGS}"
 task :test do
     run_go("test #{TEST_VERBOSE} #{TPKGS}")
