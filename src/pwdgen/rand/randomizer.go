@@ -5,19 +5,16 @@
 package rand
 
 import (
-    "math/rand"
+	"math/rand"
 )
 
 // get a random rune from a given string.
 func RandomRune(charset string) rune {
-    var retval rune
+	var retval rune
 
-    maxidx := len(charset)
-    idx := rand.Intn(maxidx)
-    retval = rune(charset[idx])
+	maxidx := len(charset)
+	idx := rand.Intn(maxidx)
+	retval = rune(charset[idx])
 
-    return retval
+	return retval
 }
-
-
-
