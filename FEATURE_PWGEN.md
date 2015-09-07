@@ -1,5 +1,4 @@
-Feature: pwgen behavior
-=======================
+# Feature: pwgen behavior
 
 The most popular request so far is to behave like pwgen. Without
 further reference this seems to refer to the pwgen command line
@@ -10,8 +9,7 @@ To imitate its behavior, we have to do two things: Provide the
 same CLI, and provide the same functionality.
 
 
-CLI Changes
------------
+## CLI Changes
 
 The CLI of pwgen uses the usual getopt style found everywhere
 (except in golang). So the first order of the day is to somehow
@@ -46,8 +44,7 @@ using the same seed file (the -H option) will most probably not
 yield the same passwords.
 
 
-Functionality Changes
----------------------
+## Functionality Changes
 
 Some of the functionality here can already be achived by selecting
 the proper symbol sets, other functionality needs real changes. From
