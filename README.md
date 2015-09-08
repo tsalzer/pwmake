@@ -10,13 +10,24 @@ in Go, and it is a vehicle to learn the language to me.
 
 ## What would you need?
 
-Probably a Go compiler. On an Ubuntu system, you can install one
-using
+Go, of course. However, the simple way to just yell
 
-	sudo apt-get install golang
+	# sudo apt-get install golang
 
-This should work on any modern Debian-derived systems. If not, go to
-http://golang.org/ and download a Go distribution for your system.
+on a Debian-derived system will probably deploy just a very old and
+outdated version of Go to your system. So: *Don't Do That!* In fact,
+if you have done so before, either uninstall the distributions Go with
+
+    # sudo apt-get remove golang golang-go
+
+or just don't use it. Deploy the Go version from https://golang.org/dl/
+for your system, and make sure to use that version by prefixing it to
+your path:
+
+    # export GOROOT=/usr/local/go
+    # export PATH=/usr/local/go/bin/go:$PATH
+    # which go
+    /usr/local/go/bin/go
 
 For the time being, you should have a working make or rake installed
 to start building, but since Go comes with its own build system, you
