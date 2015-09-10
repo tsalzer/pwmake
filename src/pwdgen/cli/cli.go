@@ -96,6 +96,7 @@ func ParseNewCliFromString(args []string) (Cli, error) {
 func (c *Cli) Parse() error {
 	var idx int
 	var val string
+	var posargidx = 0
 
 	for idx = 1; idx < len(c.Args); idx++ {
 		val = c.Args[idx]
@@ -143,7 +144,17 @@ func (c *Cli) Parse() error {
 		case val == "-y" || val == "--symbols":
 			c.UseSpecials = true
 		default:
-			return fmt.Errorf("unknwon argument \"%s\" at %d", val, idx)
+			posargidx++
+			ival64, err := strconv.ParseInt(val, 10, 32)
+			if posargidx >= 3 || err != nil {
+				return fmt.Errorf("unknwon argument \"%s\" at %d", val, idx)
+			}
+
+			if posargidx == 1 {
+				c.PwLength = int(ival64)
+			} else {
+				c.PwNum = int(ival64)
+			}
 		}
 	}
 	return nil
