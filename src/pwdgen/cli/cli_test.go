@@ -95,3 +95,50 @@ func TestParseFriendly(t *testing.T) {
 	cliCheckBool(t, []string{"-h", "--help"}, "ShowHelp", true)
 
 }
+
+func TestPositionalArguments(t *testing.T) {
+	var cl Cli
+	var err error
+	var args []string
+
+	loader := func(tstargs []string, fn func()) {
+		args = tstargs
+		fullargs := concatStringSlices([]string{"x"}, args)
+		if cl, err = ParseNewCliFromString(fullargs); err != nil {
+			t.Errorf("failed to parse %s, results in error: %s", args, err)
+		} else {
+			fn()
+		}
+	}
+
+	loader([]string{"10"}, func() {
+		if (cl.PwLength != 10) {
+			t.Errorf("expected pw_length to set password length to 10, got %d", cl.PwLength)
+		}
+	})
+
+	loader([]string{"10", "4"}, func() {
+		if (cl.PwLength != 10) {
+			t.Errorf("expected pw_length to set password length to 10, got %d", cl.PwLength)
+		}
+
+		if (cl.PwNum != 4) {
+			t.Errorf("expected num_pw to set number of passwords  to 4, got %d", cl.PwNum)
+		}
+	})
+
+	loader([]string{"-A", "10", "4"}, func() {
+		if (cl.PwLength != 10) {
+			t.Errorf("expected pw_length to set password length to 9, got %d", cl.PwLength)
+		}
+
+		if (cl.PwNum != 4) {
+			t.Errorf("expected num_pw to set number of passwords  to 4, got %d", cl.PwNum)
+		}
+
+		if (cl.UseCapitals != false) {
+			t.Errorf("expected -A to set UseCapitals to false, got true")
+		}
+	})
+
+}
