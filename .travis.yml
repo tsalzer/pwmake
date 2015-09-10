@@ -1,0 +1,16 @@
+# This is go
+language: go
+
+# Versions to test on: 1.5, tip
+go:
+    - 1.5
+    - tip
+
+# since the source lives in "src", we have to fiddle with
+# the GOPATH:
+install:
+    - export GOPATH="${TRAVIS_BUILD_DIR}:${GOPATH}"
+
+# The tests to run:
+script:
+    - go test -v ./...
