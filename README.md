@@ -1,7 +1,5 @@
 # pwmake
 
-[![Build Status](https://magnum.travis-ci.com/tsalzer/pwmake.svg?token=NsWKUbacyqpxAwru41NP&branch=master)](https://magnum.travis-ci.com/tsalzer/pwmake)
-
 Yet Another Password Generator. This one has two selling points:
 It tries to be like another, existing (and, most probably, superior)
 password generator (pwgen). And, it is implemented in Go. Point one
