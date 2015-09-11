@@ -112,31 +112,31 @@ func TestPositionalArguments(t *testing.T) {
 	}
 
 	loader([]string{"10"}, func() {
-		if (cl.PwLength != 10) {
+		if cl.PwLength != 10 {
 			t.Errorf("expected pw_length to set password length to 10, got %d", cl.PwLength)
 		}
 	})
 
 	loader([]string{"10", "4"}, func() {
-		if (cl.PwLength != 10) {
+		if cl.PwLength != 10 {
 			t.Errorf("expected pw_length to set password length to 10, got %d", cl.PwLength)
 		}
 
-		if (cl.PwNum != 4) {
+		if cl.PwNum != 4 {
 			t.Errorf("expected num_pw to set number of passwords  to 4, got %d", cl.PwNum)
 		}
 	})
 
 	loader([]string{"-A", "10", "4"}, func() {
-		if (cl.PwLength != 10) {
+		if cl.PwLength != 10 {
 			t.Errorf("expected pw_length to set password length to 9, got %d", cl.PwLength)
 		}
 
-		if (cl.PwNum != 4) {
+		if cl.PwNum != 4 {
 			t.Errorf("expected num_pw to set number of passwords  to 4, got %d", cl.PwNum)
 		}
 
-		if (cl.UseCapitals != false) {
+		if cl.UseCapitals != false {
 			t.Errorf("expected -A to set UseCapitals to false, got true")
 		}
 	})

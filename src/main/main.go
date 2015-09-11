@@ -10,8 +10,8 @@ import (
 	"os"
 	"pwdgen"
 	"pwdgen/cli"
-	"pwdgen/symbol"
 	"pwdgen/screen"
+	"pwdgen/symbol"
 )
 
 var cmdline cli.Cli
