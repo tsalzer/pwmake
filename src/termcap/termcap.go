@@ -5,26 +5,26 @@
 package termcap
 
 import (
-	"os"
 	"errors"
-    "syscall"
-    "unsafe"
+	"os"
+	"syscall"
+	"unsafe"
 )
 
 type WinSize struct {
-    Row, Col uint16
-    XPixel, YPixel uint16
+	Row, Col       uint16
+	XPixel, YPixel uint16
 }
 
 func GetTermSize() (*WinSize, error) {
-    ws := &WinSize{}
-    _, _, errno := syscall.Syscall(syscall.SYS_IOCTL,
-        uintptr(os.Stdout.Fd()), uintptr(syscall.TIOCGWINSZ),
-        uintptr(unsafe.Pointer(&ws)))
+	ws := &WinSize{}
+	_, _, errno := syscall.Syscall(syscall.SYS_IOCTL,
+		uintptr(os.Stdout.Fd()), uintptr(syscall.TIOCGWINSZ),
+		uintptr(unsafe.Pointer(&ws)))
 
-    if errno != 0 {
-        return nil, errors.New(errno.Error())
-    }
+	if errno != 0 {
+		return nil, errors.New(errno.Error())
+	}
 
-    return ws, nil
+	return ws, nil
 }
