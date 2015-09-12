@@ -6,6 +6,11 @@ go:
     - 1.5
     - tip
 
+# test on Linux and OSX
+os:
+    - linux
+    - osx
+
 # since the source lives in "src", we have to fiddle with
 # the GOPATH:
 install:
