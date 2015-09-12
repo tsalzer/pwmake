@@ -8,6 +8,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"termcap"
 	"pwdgen"
 	"pwdgen/cli"
 	"pwdgen/screen"
@@ -24,7 +25,9 @@ func init() {
 // print a screen of num passwords
 func PrintScreen(num int) error {
 	pwlen := cmdline.PwLength
-	screen := screen.DefaultWinSize()
+	winsize, _ := termcap.GetTermSize()
+	screen := screen.NewWinSize(winsize.Row, winsize.Col)
+
 	if num == 0 {
 		num = screen.CalcPasswordsPerScreen(pwlen)
 	}
