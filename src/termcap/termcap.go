@@ -16,14 +16,14 @@ type WinSize struct {
 	XPixel, YPixel uint16
 }
 
-func GetTermSize() (*WinSize, error) {
-	ws := &WinSize{}
+func GetTermSize() (WinSize, error) {
+	ws := WinSize{}
 	_, _, errno := syscall.Syscall(syscall.SYS_IOCTL,
 		uintptr(os.Stdout.Fd()), uintptr(syscall.TIOCGWINSZ),
 		uintptr(unsafe.Pointer(&ws)))
 
 	if errno != 0 {
-		return nil, errors.New(errno.Error())
+		return WinSize{}, errors.New(errno.Error())
 	}
 
 	return ws, nil
