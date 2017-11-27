@@ -10,6 +10,7 @@ pwmake
 ### IDEA files
 #
 # see https://github.com/github/gitignore/blob/master/Global/JetBrains.gitignore
+/projectFilesBackup/*
 
 ## Directory-based project format:
 # .idea/
