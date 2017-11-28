@@ -1,9 +1,10 @@
 # This is go
 language: go
 
-# Versions to test on: 1.5, tip
+# Versions to test on: 1.5, 1.9, tip
 go:
     - 1.5
+    - 1.9
     - tip
 
 # test on Linux and OSX
