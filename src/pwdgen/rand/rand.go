@@ -7,18 +7,21 @@
 package rand
 
 import (
-	//    "crypto/rand"
-	//    "math/big"
-	"math/rand"
-	"time"
+	"crypto/rand"
+	"math/big"
 )
 
 func InitializeRandomizer() {
 	// initialize random seed
-	rand.Seed(time.Now().UTC().UnixNano())
+	// This was required for the math/rand approach.
 }
 
 // default random function.
 func DefaultRandom(maxval int) int {
-	return rand.Intn(maxval)
+	nBig, err := rand.Int(rand.Reader, big.NewInt(int64(maxval)))
+	if err != nil {
+		panic("somehow cannot read random data")
+	}
+
+	return int(nBig.Int64())
 }
