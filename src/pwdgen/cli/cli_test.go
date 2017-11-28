@@ -23,6 +23,7 @@ func cliLoader(t *testing.T, args []string, cb func(c Cli, a []string)) {
 	}
 }
 
+// FIXME: cliLoaderSingle may be removed
 func cliLoaderSingle(t *testing.T, arg string, cb func(c Cli, a []string)) {
 	cliLoader(t, []string{arg}, cb)
 }
@@ -41,7 +42,7 @@ func cliCheckBool(t *testing.T, args []string, name string, expval bool) {
 		if field.IsValid() {
 			val := field.Bool()
 			if val != expval {
-				t.Errorf("expected %s to set %s to %s, got %s", a, name, expval, val)
+				t.Errorf("expected %s to set %s to %t, got %t", a, name, expval, val)
 			}
 		} else {
 			t.Errorf("field %s not found, cannot test this", name)

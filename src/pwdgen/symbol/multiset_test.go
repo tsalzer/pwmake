@@ -50,7 +50,8 @@ func TestGetContainingSet(t *testing.T) {
 	// negative checks
 	specials.Each(func(symbol *Symbol) error {
 		if s, err := ms.GetContainingSet(symbol); s != nil || err == nil {
-			t.Errorf("symbol %s should not be in any set, but was located in set %v (error was: %s)", s, err)
+			t.Errorf("symbol %s should not be in any set, " +
+				"but was located in set %v (error was: %s)", symbol, s, err)
 		}
 		return nil // we want to check all symbols
 	})

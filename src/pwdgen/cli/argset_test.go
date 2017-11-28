@@ -7,10 +7,12 @@ import (
 func TestNewArgSet(t *testing.T) {
 	s := NewArgSet()
 	if len(s.Args) != 0 {
-		t.Errorf("got some argument at construction time: %s", s.Args)
+		// FIXME: report the offending argument somehow
+		// t.Errorf("got some argument at construction time: %s", s.Args)
+		t.Errorf("got some argument at construction time")
 	}
 	if s.Len() != len(s.Args) {
-		t.Errorf("ArgSet#Len() reports %d, whicle len(Args) report %d", s.Len(), len(s.Args))
+		t.Errorf("ArgSet#Len() reports %d, while len(Args) report %d", s.Len(), len(s.Args))
 	}
 }
 

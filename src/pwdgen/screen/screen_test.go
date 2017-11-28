@@ -22,7 +22,7 @@ func TestSendPasswordToFunc(t *testing.T) {
 			// check we're not exceeding the number of expected calls
 			count++
 			if count > explen {
-				return fmt.Errorf("%s: expected %s passwords, but got %s as number %d",
+				return fmt.Errorf("%s: expected %d passwords, but got %s as number %d",
 					tcase, explen, pwd, count)
 			}
 

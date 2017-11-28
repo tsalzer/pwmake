@@ -23,7 +23,7 @@ func SampleRandomRunes(t *testing.T, charset string, numsamples int) map[rune]in
 		if _, ok := results[char]; ok {
 			results[char]++
 		} else {
-			t.Errorf("in iteration %d: got value \"%s\" which is not in the charset",
+			t.Errorf("in iteration %d: got value \"%#v\" which is not in the charset",
 				i, char)
 		}
 
@@ -45,7 +45,7 @@ func TestRandomRune(t *testing.T) {
 	// check the result map
 	for key, value := range results {
 		if value == 0 {
-			t.Errorf("character %s was never picked", key)
+			t.Errorf("character %#v was never picked", key)
 		}
 	}
 }
